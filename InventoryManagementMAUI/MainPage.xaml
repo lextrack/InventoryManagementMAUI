@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InventoryManagementMAUI.MainPage"
+             Title="Inventory">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" 
+          Padding="10">
+        <!-- Search bar -->
+        <SearchBar x:Name="searchBar"
+                   Placeholder="Search product..."
+                   TextChanged="OnSearchTextChanged"
+                   Margin="0,0,0,5"
+                   HeightRequest="40"/>
+
+        <!-- Filters -->
+        <Grid Grid.Row="1" 
+              ColumnDefinitions="*,Auto"
+              Margin="0,0,0,5">
+            <Picker x:Name="categoryPicker"
+                    Title="All categories"
+                    SelectedIndexChanged="OnCategoryFilterChanged"
+                    HeightRequest="60"
+                    Margin="0,0,5,0"
+                    BackgroundColor="{AppThemeBinding Light=#f5f5f5, Dark=#333333}"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    TitleColor="{AppThemeBinding Light=Black, Dark=White}">
+                <Picker.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light=#20000000, Dark=#40000000}"
+                            Offset="0,1"
+                            Radius="2"/>
+                </Picker.Shadow>
+            </Picker>
+
+            <Button Grid.Column="1"
+                    Text="Clear"
+                    Clicked="OnClearFiltersClicked"
+                    HeightRequest="40"
+                    BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    Padding="10,0"/>
+        </Grid>
+
+        <!-- Main Grid -->
+        <Grid Grid.Row="2" 
+              RowDefinitions="Auto,*"
+              Margin="0,0,0,5">
+
+            <Button Text="+ Add Product" 
+                    Clicked="OnAddClicked"
+                    HeightRequest="45"
+                    BackgroundColor="#228B22"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    Margin="0,0,0,5"/>
+
+            <CollectionView Grid.Row="1" 
+                           x:Name="productsCollection"
+                           SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,0,0,5" 
+                               Padding="10"
+                               BorderColor="{AppThemeBinding Light=LightGray, Dark=#3b3b3b}">
+
+                            <!-- Tappable area -->
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnItemTapped"/>
+                                </Grid.GestureRecognizers>
+
+                                <!-- Product information -->
+                                <StackLayout Spacing="3">
+                                    <Label Text="{Binding Name}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding Description}"
+                                           FontSize="14"
+                                           TextColor="Gray"/>
+                                </StackLayout>
+
+                                <!-- Price and quantity -->
+                                <StackLayout Grid.Column="1"
+                                           HorizontalOptions="End"
+                                           Spacing="3">
+                                    <Label Text="{Binding Price, StringFormat='${0:N2}'}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="End"/>
+                                    <Label Text="{Binding Quantity, StringFormat='Quantity: {0}'}"
+                                           FontSize="14"
+                                           TextColor="Gray"
+                                           HorizontalOptions="End"/>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" 
+                               VerticalOptions="Center">
+                        <Label Text="No products found"
+                               HorizontalOptions="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Grid>
+
+        <!-- Pagination -->
+        <Grid Grid.Row="3" 
+              ColumnDefinitions="Auto,*,Auto"
+              HeightRequest="40"
+              Margin="0,10">
+
+            <Picker x:Name="pageSizePicker"
+                    SelectedIndexChanged="OnPageSizeChanged"
+                    WidthRequest="70"
+                    HeightRequest="45"
+                    BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}">
+                <Picker.Items>
+                    <x:String>5</x:String>
+                    <x:String>10</x:String>
+                    <x:String>20</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <HorizontalStackLayout Grid.Column="1"
+                                 HorizontalOptions="Center"
+                                 Spacing="5">
+                <Button x:Name="previousButton"
+                        Text="⟨"
+                        Clicked="OnPreviousClicked"
+                        MinimumWidthRequest="40"
+                        MinimumHeightRequest="40"
+                        Padding="10,0"
+                        BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                        TextColor="White"/>
+
+                <Border Stroke="{AppThemeBinding Light=#e0e0e0, Dark=#404040}"
+                        StrokeThickness="1"
+                        BackgroundColor="{AppThemeBinding Light=#ffffff, Dark=#2b2b2b}"
+                        Padding="15,8">
+                    <Label x:Name="currentPageLabel"
+                           Text="1/1"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                </Border>
+
+                <Button x:Name="nextButton"
+                        Text="⟩"
+                        Clicked="OnNextClicked"
+                        MinimumWidthRequest="40"
+                        MinimumHeightRequest="40"
+                        Padding="10,0"
+                        BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                        TextColor="White"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InventoryManagementMAUI.Pages.ProductPage"
+             Title="Product">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <!-- Name -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Name:" />
+                <Entry x:Name="nameEntry"
+                       Placeholder="Product name"/>
+            </VerticalStackLayout>
+
+            <!-- Description -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Description:" />
+                <Entry x:Name="descriptionEntry"
+                       Placeholder="Description"/>
+            </VerticalStackLayout>
+
+            <!-- Quantity -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Quantity:" />
+                <Entry x:Name="quantityEntry"
+                       Keyboard="Numeric"
+                       MaxLength="8"
+                       TextChanged="OnQuantityTextChanged"/>
+                <Label x:Name="quantityError"
+                       TextColor="Red"
+                       IsVisible="false"
+                       Text="Please enter only positive numbers"/>
+            </VerticalStackLayout>
+
+            <!-- Price -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Price:" />
+                <Entry x:Name="priceEntry"
+                       Keyboard="Numeric"
+                       MaxLength="10"
+                       TextChanged="OnPriceTextChanged"
+                       Placeholder="0.00"/>
+                <Label x:Name="priceError"
+                       TextColor="Red"
+                       IsVisible="false"
+                       Text="Please enter a valid price"/>
+            </VerticalStackLayout>
+
+            <!-- Category -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Category:" />
+                <Entry x:Name="categoryEntry"
+                       Placeholder="Category"/>
+            </VerticalStackLayout>
+
+            <!-- Total -->
+            <Frame BorderColor="LightGray" 
+                   Padding="10" 
+                   Margin="0,5,0,15"
+                   BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Total:" 
+                           FontAttributes="Bold"/>
+                    <Label x:Name="totalLabel" 
+                           Text="$ 0.00" 
+                           FontSize="24"
+                           TextColor="#4CAF50"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Buttons container and labels -->
+            <VerticalStackLayout Spacing="0" Margin="0,10,0,20">
+                <!-- Buttons for new product -->
+                <Grid ColumnDefinitions="Auto,Auto" 
+                      ColumnSpacing="15"
+                      HorizontalOptions="Center"
+                      x:Name="newProductButtons">
+                    <!-- Save -->
+                    <VerticalStackLayout Grid.Column="0">
+                        <Button x:Name="saveButton"
+                                Text="💾"
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                CornerRadius="25"
+                                BackgroundColor="#6750A4"
+                                TextColor="White"
+                                FontSize="18"
+                                Padding="0"
+                                Clicked="OnSaveClicked"/>
+                        <Label Text="Save" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <!-- Copy -->
+                    <VerticalStackLayout Grid.Column="1">
+                        <Button x:Name="copyButton"
+                                Text="📋"
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                CornerRadius="25"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                FontSize="18"
+                                Padding="0"
+                                Clicked="OnCopyToClipboardClicked"/>
+                        <Label Text="Copy" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Buttons for existing product -->
+                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" 
+                      ColumnSpacing="15"
+                      HorizontalOptions="Center"
+                      x:Name="existingProductButtons"
+                      IsVisible="false">
+                    <!-- Save -->
+                    <VerticalStackLayout Grid.Column="0">
+                        <Button x:Name="saveExistingButton"
+                                Text="💾"
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                CornerRadius="25"
+                                BackgroundColor="#6750A4"
+                                TextColor="White"
+                                FontSize="18"
+                                Padding="0"
+                                Clicked="OnSaveClicked"/>
+                        <Label Text="Save" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <!-- Copy -->
+                    <VerticalStackLayout Grid.Column="1">
+                        <Button x:Name="copyExistingButton"
+                                Text="📋"
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                CornerRadius="25"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                FontSize="18"
+                                Padding="0"
+                                Clicked="OnCopyToClipboardClicked"/>
+                        <Label Text="Copy" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <!-- Outgoing -->
+                    <VerticalStackLayout Grid.Column="2">
+                        <Button Text="📤"
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                CornerRadius="25"
+                                BackgroundColor="#4CAF50"
+                                TextColor="White"
+                                FontSize="18"
+                                Padding="0"
+                                Clicked="OnRegisterOutputClicked"/>
+                        <Label Text="Outgoing" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <!-- Duplicate -->
+                    <VerticalStackLayout Grid.Column="3">
+                        <Button x:Name="duplicateButton"
+                                Text="📝"
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                CornerRadius="25"
+                                BackgroundColor="#FF9800"
+                                TextColor="White"
+                                FontSize="18"
+                                Padding="0"
+                                Clicked="OnDuplicateClicked"/>
+                        <Label Text="Duplicate" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <!-- Delete -->
+                    <VerticalStackLayout Grid.Column="4">
+                        <Button x:Name="deleteButton"
+                                Text="🗑"
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                CornerRadius="25"
+                                BackgroundColor="#DC3545"
+                                TextColor="White"
+                                FontSize="18"
+                                Padding="0"
+                                Clicked="OnDeleteClicked"/>
+                        <Label Text="Delete" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="5">
+                        <Button Text="📋"
+                            HeightRequest="45"
+                            WidthRequest="45"
+                            CornerRadius="25"
+                            BackgroundColor="#9C27B0"
+                            TextColor="White"
+                            FontSize="18"
+                            Padding="0"
+                            Clicked="OnViewMovementsClicked"/>
+                                        <Label Text="History" 
+                            FontSize="12"
+                            HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

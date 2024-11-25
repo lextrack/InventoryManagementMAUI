@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:InventoryManagementMAUI.Converters"
+             x:Class="InventoryManagementMAUI.Pages.ProductMovementsPage"
+             Title="Movement History">
+
+    <ContentPage.Resources>
+        <converters:MovementTypeColorConverter x:Key="MovementTypeColorConverter"/>
+        <converters:MovementTypeBorderColorConverter x:Key="MovementTypeBorderColorConverter"/>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*" Padding="10">
+        <!-- Product Info -->
+        <Frame Margin="0,0,0,10"
+               BorderColor="LightGray"
+               BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="{Binding Name}"
+                       FontSize="18"
+                       FontAttributes="Bold"/>
+                <Label Text="{Binding Description}"
+                       TextColor="Gray"/>
+                <Grid ColumnDefinitions="*,*">
+                    <Label Text="{Binding Price, StringFormat='Price: ${0:N2}'}"
+                           Grid.Column="0"/>
+                    <Label Text="{Binding Quantity, StringFormat='Current Stock: {0}'}"
+                           Grid.Column="1"
+                           HorizontalOptions="End"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Movements List -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Movements}">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center"
+                                   VerticalOptions="Center">
+                    <Label Text="No movements found"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,0,0,10"
+                           BorderColor="{Binding Type, Converter={StaticResource MovementTypeBorderColorConverter}}"
+                           BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}">
+                        <Grid RowDefinitions="Auto,Auto"
+                              ColumnDefinitions="*,Auto">
+                            <!-- Movement Type and Quantity -->
+                            <StackLayout Orientation="Horizontal"
+                                       Spacing="10">
+                                <Label FontAttributes="Bold">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Type}"
+                                                  TextColor="{Binding Type, Converter={StaticResource MovementTypeColorConverter}}"/>
+                                            <Span Text=" "/>
+                                            <Span Text="{Binding Quantity, StringFormat='{0} units'}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </StackLayout>
+
+                            <!-- Date -->
+                            <Label Grid.Column="1"
+                                   Text="{Binding Date, StringFormat='{0:MM/dd/yyyy HH:mm}'}"
+                                   TextColor="Gray"
+                                   FontSize="12"/>
+
+                            <!-- Notes -->
+                            <Label Grid.Row="1"
+                                   Grid.ColumnSpan="2"
+                                   Text="{Binding Notes}"
+                                   TextColor="Gray"
+                                   FontSize="14"
+                                   Margin="0,5,0,0"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

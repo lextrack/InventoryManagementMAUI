@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InventoryManagementMAUI.Pages.ProductOutputPage"
+             Title="Product Output">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <!-- Product Info -->
+            <Frame BorderColor="LightGray" 
+                   Padding="10" 
+                   Margin="0,5,0,15">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="{Binding Name}" 
+                           FontAttributes="Bold"
+                           FontSize="18"/>
+                    <Label Text="{Binding Description}"
+                           TextColor="Gray"/>
+                    <Grid ColumnDefinitions="*,*">
+                        <Label Text="{Binding Price, StringFormat='Price: ${0:N2}'}"
+                               Grid.Column="0"/>
+                        <Label Text="{Binding Quantity, StringFormat='Current Stock: {0}'}"
+                               Grid.Column="1"
+                               HorizontalOptions="End"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Output Quantity -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Output Quantity:" />
+                <Entry x:Name="quantityEntry"
+                       Keyboard="Numeric"
+                       TextChanged="OnQuantityTextChanged"/>
+                <Label x:Name="quantityError"
+                       TextColor="Red"
+                       IsVisible="false"
+                       Text="Please enter a valid quantity"/>
+            </VerticalStackLayout>
+
+            <!-- Notes -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Notes:" />
+                <Editor x:Name="notesEntry"
+                        Placeholder="Enter notes about this output"
+                        HeightRequest="100"/>
+            </VerticalStackLayout>
+
+            <!-- Buttons -->
+            <Button Text="Register Output"
+                    x:Name="registerButton"
+                    BackgroundColor="#6750A4"
+                    TextColor="White"
+                    Clicked="OnRegisterClicked"
+                    Margin="0,20,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
