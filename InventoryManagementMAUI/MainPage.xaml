@@ -105,18 +105,18 @@
                 </CollectionView.EmptyView>
             </CollectionView>
         </Grid>
-
+        
         <!-- Pagination -->
         <Grid Grid.Row="3" 
-              ColumnDefinitions="Auto,*,Auto"
+              ColumnDefinitions="Auto,*,Auto,Auto"
               HeightRequest="40"
               Margin="0,10">
 
             <Picker x:Name="pageSizePicker"
-                    SelectedIndexChanged="OnPageSizeChanged"
-                    WidthRequest="70"
-                    HeightRequest="45"
-                    BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}">
+            SelectedIndexChanged="OnPageSizeChanged"
+            WidthRequest="70"
+            HeightRequest="45"
+            BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}">
                 <Picker.Items>
                     <x:String>5</x:String>
                     <x:String>10</x:String>
@@ -125,37 +125,57 @@
             </Picker>
 
             <HorizontalStackLayout Grid.Column="1"
-                                 HorizontalOptions="Center"
-                                 Spacing="5">
+                         HorizontalOptions="Center"
+                         Spacing="5">
                 <Button x:Name="previousButton"
-                        Text="⟨"
-                        Clicked="OnPreviousClicked"
-                        MinimumWidthRequest="40"
-                        MinimumHeightRequest="40"
-                        Padding="10,0"
-                        BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
-                        TextColor="White"/>
+                Text="⟨"
+                Clicked="OnPreviousClicked"
+                MinimumWidthRequest="40"
+                MinimumHeightRequest="40"
+                Padding="10,0"
+                BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                TextColor="White"/>
 
                 <Border Stroke="{AppThemeBinding Light=#e0e0e0, Dark=#404040}"
-                        StrokeThickness="1"
-                        BackgroundColor="{AppThemeBinding Light=#ffffff, Dark=#2b2b2b}"
-                        Padding="15,8">
+                StrokeThickness="1"
+                BackgroundColor="{AppThemeBinding Light=#ffffff, Dark=#2b2b2b}"
+                Padding="15,8">
                     <Label x:Name="currentPageLabel"
-                           Text="1/1"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center"
-                           TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                   Text="1/1"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                 </Border>
 
                 <Button x:Name="nextButton"
-                        Text="⟩"
-                        Clicked="OnNextClicked"
-                        MinimumWidthRequest="40"
-                        MinimumHeightRequest="40"
-                        Padding="10,0"
-                        BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
-                        TextColor="White"/>
+                Text="⟩"
+                Clicked="OnNextClicked"
+                MinimumWidthRequest="40"
+                MinimumHeightRequest="40"
+                Padding="10,0"
+                BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                TextColor="White"/>
             </HorizontalStackLayout>
+
+            <!-- Export button -->
+            <Button Grid.Column="2"
+                Text="📊"
+                HeightRequest="45"
+                WidthRequest="40"
+                Margin="10,0,0,0"
+                BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                TextColor="White"
+                Clicked="OnExportClicked"/>
+
+            <!-- About Button -->
+            <Button Grid.Column="3"
+                Text="ℹ️"
+                HeightRequest="45"
+                WidthRequest="40"
+                Margin="10,0,0,0"
+                BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                TextColor="White"
+                Clicked="OnAboutClicked"/>
         </Grid>
     </Grid>
 </ContentPage>

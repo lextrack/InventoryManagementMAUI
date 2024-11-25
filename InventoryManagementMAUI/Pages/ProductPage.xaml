@@ -8,15 +8,13 @@
             <!-- Name -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Name:" />
-                <Entry x:Name="nameEntry"
-                       Placeholder="Product name"/>
+                <Entry x:Name="nameEntry"/>
             </VerticalStackLayout>
 
             <!-- Description -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Description:" />
-                <Entry x:Name="descriptionEntry"
-                       Placeholder="Description"/>
+                <Entry x:Name="descriptionEntry"/>
             </VerticalStackLayout>
 
             <!-- Quantity -->
@@ -49,8 +47,7 @@
             <!-- Category -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Category:" />
-                <Entry x:Name="categoryEntry"
-                       Placeholder="Category"/>
+                <Entry x:Name="categoryEntry"/>
             </VerticalStackLayout>
 
             <!-- Total -->

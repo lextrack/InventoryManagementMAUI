@@ -1,4 +1,5 @@
-﻿using InventoryManagementMAUI.Models;
+﻿using ClosedXML.Excel;
+using InventoryManagementMAUI.Models;
 using InventoryManagementMAUI.Pages;
 using InventoryManagementMAUI.Services;
 
@@ -37,6 +38,99 @@ namespace InventoryManagementMAUI
             }
         }
 
+        private async void OnExportClicked(object sender, EventArgs e)
+        {
+            await ExportToExcel();
+        }
+
+        private async Task ExportToExcel()
+        {
+            try
+            {
+                var products = await _database.GetProductsAsync();
+
+                if (!products.Any())
+                {
+                    await DisplayAlert("Error", "No products to export", "OK");
+                    return;
+                }
+
+                var directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var fileName = $"Inventory_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                var filePath = Path.Combine(directory, fileName);
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Inventory");
+
+                    string[] headers = { "ID", "Name", "Description", "Quantity", "Price", "Category", "Created Date" };
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        worksheet.Cell(1, i + 1).Value = headers[i];
+                        worksheet.Cell(1, i + 1).Style.Font.Bold = true;
+                    }
+
+                    int row = 2;
+                    foreach (var product in products)
+                    {
+                        worksheet.Cell(row, 1).Value = product.Id;
+                        worksheet.Cell(row, 2).Value = product.Name;
+                        worksheet.Cell(row, 3).Value = product.Description;
+                        worksheet.Cell(row, 4).Value = product.Quantity;
+                        worksheet.Cell(row, 5).Value = product.Price;
+                        worksheet.Cell(row, 6).Value = product.Category;
+                        worksheet.Cell(row, 7).Value = product.CreatedAt;
+                        row++;
+                    }
+
+                    worksheet.Column(4).Style.NumberFormat.NumberFormatId = 1; // Quantity as number
+                    worksheet.Column(5).Style.NumberFormat.Format = "$#,##0.00"; // Price as currency
+                    worksheet.Column(7).Style.NumberFormat.Format = "mm/dd/yyyy"; // Date format
+
+                    int lastRow = products.Count() + 1;
+                    worksheet.Cell(lastRow + 1, 3).Value = "Total:";
+                    worksheet.Cell(lastRow + 1, 4).FormulaA1 = $"=SUM(D2:D{lastRow})";
+                    worksheet.Cell(lastRow + 1, 5).FormulaA1 = $"=SUM(E2:E{lastRow})";
+
+                    worksheet.Columns().AdjustToContents();
+
+                    // Save and share
+                    workbook.SaveAs(filePath);
+                    await Task.Delay(100);
+
+                    if (File.Exists(filePath))
+                    {
+                        try
+                        {
+                            await Share.RequestAsync(new ShareFileRequest
+                            {
+                                Title = "Export Inventory",
+                                File = new ShareFile(filePath)
+                            });
+                            await DisplayAlert("Success", $"File has been saved at:\n{filePath}", "OK");
+                        }
+                        catch (Exception ex)
+                        {
+                            await DisplayAlert("Error", $"Error sharing file: {ex.Message}", "OK");
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "Could not create Excel file", "OK");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Export error: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnAboutClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AboutPage());
+        }
+
         protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
             base.OnNavigatedTo(args);
@@ -47,7 +141,6 @@ namespace InventoryManagementMAUI
         {
             try
             {
-                // Load all products
                 _allProducts = await _database.GetProductsAsync();
 
                 var categories = _allProducts
