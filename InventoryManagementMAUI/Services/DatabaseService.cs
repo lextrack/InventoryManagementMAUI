@@ -33,7 +33,7 @@ namespace InventoryManagementMAUI.Services
         {
             if (product.Id == 0)
             {
-                product.CreatedAt = DateTime.Now; 
+                product.CreatedAt = DateTime.Now;
                 var result = await _database.InsertAsync(product);
                 if (result > 0)
                 {

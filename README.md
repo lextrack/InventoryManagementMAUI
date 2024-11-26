@@ -9,3 +9,4 @@ A streamlined inventory management solution designed for small and medium busine
 <img src="./InventoryManagementMAUI/Captures/1.png">
 <img src="./InventoryManagementMAUI/Captures/2.png">
 <img src="./InventoryManagementMAUI/Captures/3.png">
+<img src="./InventoryManagementMAUI/Captures/4.png">
