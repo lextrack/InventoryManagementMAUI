@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InventoryManagementMAUI.Pages.DashboardPage"
+             Title="Dashboard">
+
+    <Grid>
+        <!-- Indicador de Carga -->
+        <ActivityIndicator IsRunning="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=IsBusy}"
+                          IsVisible="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=IsBusy}"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"
+                          Color="#228B22"/>
+
+        <!-- Contenido Principal -->
+        <ScrollView IsVisible="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=!IsBusy}">
+            <VerticalStackLayout Padding="20" Spacing="20">
+                <!-- Summary Cards -->
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="15" RowSpacing="15">
+                    <!-- Total Products -->
+                    <Frame Grid.Column="0" Grid.Row="0"
+                           BackgroundColor="{AppThemeBinding Light=#4CAF50, Dark=#1B5E20}"
+                           Padding="15">
+                        <VerticalStackLayout>
+                            <Label Text="Total Products"
+                                   TextColor="White"
+                                   FontSize="16"/>
+                            <Label x:Name="totalProductsLabel"
+                                   Text="0"
+                                   TextColor="White"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Total Value -->
+                    <Frame Grid.Column="1" Grid.Row="0"
+                           BackgroundColor="{AppThemeBinding Light=#2196F3, Dark=#0D47A1}"
+                           Padding="15">
+                        <VerticalStackLayout>
+                            <Label Text="Total Value"
+                                   TextColor="White"
+                                   FontSize="16"/>
+                            <Label x:Name="totalValueLabel"
+                                   Text="$0.00"
+                                   TextColor="White"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Low Stock -->
+                    <Frame Grid.Column="0" Grid.Row="1"
+                           BackgroundColor="{AppThemeBinding Light=#FFC107, Dark=#FFA000}"
+                           Padding="15">
+                        <VerticalStackLayout>
+                            <Label Text="Low Stock Items"
+                                   TextColor="White"
+                                   FontSize="16"/>
+                            <Label x:Name="lowStockLabel"
+                                   Text="0"
+                                   TextColor="White"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Out of Stock -->
+                    <Frame Grid.Column="1" Grid.Row="1"
+                           BackgroundColor="{AppThemeBinding Light=#F44336, Dark=#B71C1C}"
+                           Padding="15">
+                        <VerticalStackLayout>
+                            <Label Text="Out of Stock"
+                                   TextColor="White"
+                                   FontSize="16"/>
+                            <Label x:Name="outOfStockLabel"
+                                   Text="0"
+                                   TextColor="White"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Recent Activity -->
+                <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}"
+                       Padding="15"
+                       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Recent Activity"
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+                        <CollectionView x:Name="recentActivityList"
+                                      HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5"
+                                          ColumnDefinitions="Auto,*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding Icon}"
+                                               FontSize="20"
+                                               VerticalOptions="Center"/>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                           Margin="10,0">
+                                            <Label Text="{Binding Description}"
+                                                   FontSize="14"/>
+                                            <Label Text="{Binding Date, StringFormat='{0:MM/dd/yyyy HH:mm}'}"
+                                                   FontSize="12"
+                                                   TextColor="Gray"/>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="2"
+                                               Text="{Binding Quantity, StringFormat='{0:+#;-#;0}'}"
+                                               TextColor="{Binding TextColor}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <VerticalStackLayout HorizontalOptions="Center" 
+                                                   VerticalOptions="Center">
+                                    <Label Text="No recent activity"
+                                           HorizontalOptions="Center"
+                                           TextColor="Gray"/>
+                                </VerticalStackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Category Distribution -->
+                <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}"
+                       Padding="15"
+                       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Category Distribution"
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+                        <CollectionView x:Name="categoryList"
+                                      HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5" ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0">
+                                            <Label Text="{Binding Category}"
+                                                   FontSize="14"/>
+                                            <ProgressBar Progress="{Binding Percentage}"
+                                                        ProgressColor="{Binding Color}"/>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Count}"
+                                               FontSize="14"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <VerticalStackLayout HorizontalOptions="Center" 
+                                                   VerticalOptions="Center">
+                                    <Label Text="No categories found"
+                                           HorizontalOptions="Center"
+                                           TextColor="Gray"/>
+                                </VerticalStackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Alertas -->
+                <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}"
+       Padding="15"
+       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Alerts"
+               FontSize="18"
+               FontAttributes="Bold"/>
+                        <CollectionView x:Name="alertsList"
+                      HeightRequest="150">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5" ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                               Text="{Binding Icon}"
+                               FontSize="20"
+                               TextColor="{Binding Color}"
+                               Margin="0,0,10,0"/>
+                                        <Label Grid.Column="1"
+                               Text="{Binding Message}"
+                               FontSize="14"
+                               TextColor="{Binding Color}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Top Productos -->
+                <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}"
+       Padding="15"
+       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Top Products"
+               FontSize="18"
+               FontAttributes="Bold"/>
+                        <CollectionView x:Name="topProductsList"
+                      HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5" 
+                          ColumnDefinitions="*,Auto,Auto"
+                          RowDefinitions="Auto,Auto">
+                                        <Label Grid.Column="0"
+                               Text="{Binding Name}"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+                                        <Label Grid.Column="0" 
+                               Grid.Row="1"
+                               Text="{Binding Category}"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                                        <Label Grid.Column="1"
+                               Text="{Binding MovementCount, StringFormat='Movements: {0}'}"
+                               FontSize="14"/>
+                                        <Label Grid.Column="2"
+                               Text="{Binding Value, StringFormat='${0:N2}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Filtros de Tiempo -->
+                <Grid ColumnDefinitions="*,*,*" 
+      ColumnSpacing="10"
+      Margin="0,0,0,10">
+                    <Button Text="Last 7 Days"
+            Grid.Column="0"
+            Clicked="OnLastWeekClicked"/>
+                    <Button Text="Last 30 Days"
+            Grid.Column="1"
+            Clicked="OnLastMonthClicked"/>
+                    <Button Text="All Time"
+            Grid.Column="2"
+            Clicked="OnAllTimeClicked"/>
+                </Grid>
+
+                <!-- Movement Summary -->
+                <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}"
+                       Padding="15"
+                       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Movement Summary"
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <!-- Incoming -->
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Incoming"
+                                       FontSize="14"
+                                       TextColor="#4CAF50"/>
+                                <Label x:Name="incomingCountLabel"
+                                       Text="0"
+                                       FontSize="20"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                            <!-- Outgoing -->
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Outgoing"
+                                       FontSize="14"
+                                       TextColor="#F44336"/>
+                                <Label x:Name="outgoingCountLabel"
+                                       Text="0"
+                                       FontSize="20"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

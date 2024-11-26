@@ -20,6 +20,10 @@ namespace InventoryManagementMAUI
         {
             InitializeComponent();
             _database = new DatabaseService();
+
+            int savedIndex = Preferences.Default.Get("PageSizeIndex", 0);
+            pageSizePicker.SelectedIndex = savedIndex;
+
             LoadData();
         }
 
@@ -123,6 +127,21 @@ namespace InventoryManagementMAUI
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Export error: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnOptionsClicked(object sender, EventArgs e)
+        {
+            string action = await DisplayActionSheet("Options", "Cancel", null, "Dashboard", "Export to Excel");
+
+            switch (action)
+            {
+                case "Dashboard":
+                    await Navigation.PushAsync(new DashboardPage());
+                    break;
+                case "Export to Excel":
+                    await ExportToExcel();
+                    break;
             }
         }
 
@@ -259,7 +278,8 @@ namespace InventoryManagementMAUI
             if (pageSizePicker.SelectedItem != null)
             {
                 _pageSize = int.Parse(pageSizePicker.SelectedItem.ToString());
-                _currentPage = 1; // Reset to first page
+                Preferences.Default.Set("PageSizeIndex", pageSizePicker.SelectedIndex);
+                _currentPage = 1;
                 ApplyFilters();
             }
         }

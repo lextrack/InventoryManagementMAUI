@@ -2,47 +2,79 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InventoryManagementMAUI.Pages.AboutPage"
+             BackgroundColor="#202020"
              Title="About">
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20">
-            <!-- App Logo/Icon -->
-            <Image Source="appiconbg.png"
-                   HeightRequest="100"
-                   WidthRequest="100"
-                   HorizontalOptions="Center"/>
 
-            <!-- App Title -->
-            <Label Text="Inventory Manager MAUI"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"/>
+    <VerticalStackLayout Padding="20">
+        <Frame BackgroundColor="#2A2A2A"
+               BorderColor="#333333"
+               CornerRadius="8"
+               Padding="16"
+               Margin="0,10,0,0"
+               HasShadow="True">
 
-            <!-- Version -->
-            <Label Text="Version 1.0.0"
-                   HorizontalOptions="Center"/>
+            <VerticalStackLayout Spacing="12">
+                <!-- App Icon -->
+                <Image Source="appiconbg.png"
+                       HeightRequest="40"
+                       WidthRequest="40"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Start"/>
 
-            <!-- Features Frame -->
-            <Frame BorderColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
-                   Padding="15">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Features"
-                           FontAttributes="Bold"
-                           FontSize="18"/>
-                    <Label Text="• Product Management"/>
-                    <Label Text="• Category Filtering"/>
-                    <Label Text="• Search Functionality"/>
-                    <Label Text="• Excel Export"/>
-                    <Label Text="• Stock Tracking"/>
+                <!-- App Name and Version -->
+                <Label Text="Inventory Manager MAUI"
+                       TextColor="White"
+                       FontSize="18"
+                       FontAttributes="Bold"/>
+
+                <Label Text="v1.0.0"
+                       TextColor="#CCCCCC"
+                       FontSize="14"/>
+
+                <!-- Description -->
+                <Label Text="Inventory Manager MAUI is an open-source inventory management system for Windows and Android."
+                       TextColor="#CCCCCC"
+                       FontSize="14"/>
+
+                <Label Text="Original author: Lextrack."
+                       TextColor="#CCCCCC"
+                       FontSize="14"/>
+
+                <!-- GitHub Link -->
+                <VerticalStackLayout Spacing="0">
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="You can find this project on "
+                                      TextColor="#CCCCCC"
+                                      FontSize="14"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label TextColor="#2196F3"
+                           FontSize="14"
+                           TextDecorations="Underline">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenGitHubCommand}"/>
+                        </Label.GestureRecognizers>
+                        <Label.Text>https://github.com/lextrack/InventoryManagementMAUI</Label.Text>
+                    </Label>
+                    <Label Text="keep an eye on this project, more updates coming soon!"
+                           TextColor="#CCCCCC"
+                           FontSize="14"/>
                 </VerticalStackLayout>
-            </Frame>
 
-            <!-- Copyright -->
-            <Label Text="© 2024 Lextrack"
-                   HorizontalOptions="Center"/>
+                <!-- Credits -->
+                <Label Text="This software is made possible by:"
+                       TextColor="#CCCCCC"
+                       FontSize="14"
+                       Margin="0,8,0,0"/>
 
-            <!-- Contact Info -->
-            <Label Text="Contact: lextrackstudios@gmail.com"
-                   HorizontalOptions="Center"/>
-        </VerticalStackLayout>
-    </ScrollView>
+                <Label Text=".NET MAUI and Flaticon."
+                       TextColor="#CCCCCC"
+                       FontSize="14"/>
+
+            </VerticalStackLayout>
+        </Frame>
+    </VerticalStackLayout>
 </ContentPage>
