@@ -27,7 +27,7 @@
 
             <!-- Output Quantity -->
             <VerticalStackLayout Spacing="5">
-                <Label Text="Output Quantity:" />
+                <Label Text="Outgoing Quantity:" />
                 <Entry x:Name="quantityEntry"
                        Keyboard="Numeric"
                        TextChanged="OnQuantityTextChanged"/>
@@ -41,12 +41,12 @@
             <VerticalStackLayout Spacing="5">
                 <Label Text="Notes:" />
                 <Editor x:Name="notesEntry"
-                        Placeholder="Enter notes about this output"
+                        Placeholder="Enter notes about this transaction"
                         HeightRequest="100"/>
             </VerticalStackLayout>
 
             <!-- Buttons -->
-            <Button Text="Register Output"
+            <Button Text="Register transaction"
                     x:Name="registerButton"
                     BackgroundColor="#6750A4"
                     TextColor="White"
