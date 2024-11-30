@@ -115,8 +115,7 @@
             <Picker x:Name="pageSizePicker"
                 SelectedIndexChanged="OnPageSizeChanged"
                 WidthRequest="70"
-                HeightRequest="45"
-                BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}">
+                HeightRequest="45">
                 <Picker.Items>
                     <x:String>5</x:String>
                     <x:String>10</x:String>
