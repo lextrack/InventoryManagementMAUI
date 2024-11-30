@@ -132,15 +132,61 @@ namespace InventoryManagementMAUI
 
         private async void OnOptionsClicked(object sender, EventArgs e)
         {
-            string action = await DisplayActionSheet("Options", "Cancel", null, "Dashboard", "Export to Excel");
+            string action = await DisplayActionSheet(
+                "Options",
+                "Cancel",
+                null,
+                "Dashboard",
+                "Export to Excel",
+                "Backup Database",
+                "Restore Database");
+
+            var backupService = new DatabaseBackupService(_database);
 
             switch (action)
             {
-                case "Dashboard":
-                    await Navigation.PushAsync(new DashboardPage());
+                case "Backup Database":
+                    try
+                    {
+                        var backupPath = await backupService.CreateBackup();
+                        await Share.RequestAsync(new ShareFileRequest
+                        {
+                            Title = "Share Database Backup",
+                            File = new ShareFile(backupPath)
+                        });
+                        await DisplayAlert("Success", "Backup created successfully", "OK");
+                    }
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Error", $"Backup failed: {ex.Message}", "OK");
+                    }
                     break;
-                case "Export to Excel":
-                    await ExportToExcel();
+
+                case "Restore Database":
+                    try
+                    {
+                        var result = await FilePicker.PickAsync(new PickOptions
+                        {
+                            FileTypes = new FilePickerFileType(
+                                new Dictionary<DevicePlatform, IEnumerable<string>>
+                                {
+                            { DevicePlatform.iOS, new[] { "public.database" } },
+                            { DevicePlatform.Android, new[] { "application/x-sqlite3", "application/octet-stream" } },
+                            { DevicePlatform.WinUI, new[] { ".db" } }
+                                })
+                        });
+
+                        if (result != null)
+                        {
+                            await backupService.RestoreFromBackup(result.FullPath);
+                            await LoadData();
+                            await DisplayAlert("Success", "Database restored successfully", "OK");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Error", $"Restore failed: {ex.Message}", "OK");
+                    }
                     break;
             }
         }

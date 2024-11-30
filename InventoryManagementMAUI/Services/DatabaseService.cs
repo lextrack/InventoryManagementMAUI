@@ -6,13 +6,31 @@ namespace InventoryManagementMAUI.Services
     public class DatabaseService
     {
         private SQLiteAsyncConnection _database;
+        private readonly string _databasePath;
 
         public DatabaseService()
         {
-            var databasePath = Path.Combine(FileSystem.AppDataDirectory, "inventory.db");
-            _database = new SQLiteAsyncConnection(databasePath);
+            _databasePath = Path.Combine(FileSystem.AppDataDirectory, "inventory.db");
+            _database = new SQLiteAsyncConnection(_databasePath);
             _database.CreateTableAsync<Product>().Wait();
             _database.CreateTableAsync<ProductMovement>().Wait();
+        }
+
+        public async Task CloseConnection()
+        {
+            if (_database != null)
+            {
+                await _database.CloseAsync();
+                _database = null;
+            }
+        }
+
+        public async Task ReopenConnection()
+        {
+            if (_database == null)
+            {
+                _database = new SQLiteAsyncConnection(_databasePath);
+            }
         }
 
         public async Task<List<Product>> GetProductsAsync()
