@@ -73,12 +73,10 @@
 		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 		<ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 
-		<!-- Información del keystore -->
-		<AndroidKeyStore>true</AndroidKeyStore>
-		<AndroidKeyAlias>inventoryappalias</AndroidKeyAlias>
-		<AndroidKeyPass>123456</AndroidKeyPass>
-		<AndroidKeyStorePass>123456</AndroidKeyStorePass>
-		<AndroidSigningKeyStore>C:\Users\ariel\source\repos\lextrack\InventoryManagementMAUI\inventoryapp.jks</AndroidSigningKeyStore>
+		<AndroidSigningKeyStore>inventoryapp.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>inventoryapp</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass></AndroidSigningKeyPass>
+		<AndroidSigningStorePass></AndroidSigningStorePass>
 	</PropertyGroup>
 
 
