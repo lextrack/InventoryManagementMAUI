@@ -22,7 +22,7 @@
                        VerticalOptions="Start"/>
 
                 <!-- App Name and Version -->
-                <Label Text="Inventory Manager MAUI"
+                <Label Text="Inventory Manager"
                        TextColor="White"
                        FontSize="18"
                        FontAttributes="Bold"/>
@@ -32,7 +32,7 @@
                        FontSize="14"/>
 
                 <!-- Description -->
-                <Label Text="Inventory Manager MAUI is an open-source inventory management system for Windows and Android."
+                <Label Text="Inventory Manager is an open-source inventory management system for Windows and Android."
                        TextColor="#CCCCCC"
                        FontSize="14"/>
 

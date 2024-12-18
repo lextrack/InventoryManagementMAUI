@@ -145,6 +145,10 @@ namespace InventoryManagementMAUI
 
             switch (action)
             {
+                case "Dashboard":
+                    await Navigation.PushAsync(new DashboardPage());
+                    break;
+
                 case "Backup Database":
                     try
                     {

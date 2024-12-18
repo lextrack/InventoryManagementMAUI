@@ -24,7 +24,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>InventoryManagementMAUI</ApplicationTitle>
+		<ApplicationTitle>InventoryManagementApp</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.inventorymanagementmaui</ApplicationId>
@@ -45,49 +45,57 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
+	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
+	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
+	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
+	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
-	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
+		<ApplicationTitle>Inventory Management App</ApplicationTitle>
+		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+		<ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
+
+		<!-- Información del keystore -->
+		<AndroidKeyStore>true</AndroidKeyStore>
+		<AndroidKeyAlias>inventoryappalias</AndroidKeyAlias>
+		<AndroidKeyPass>123456</AndroidKeyPass>
+		<AndroidKeyStorePass>123456</AndroidKeyStorePass>
+		<AndroidSigningKeyStore>C:\Users\ariel\source\repos\lextrack\InventoryManagementMAUI\inventoryapp.jks</AndroidSigningKeyStore>
 	</PropertyGroup>
 
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
+	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
+	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
-	  <ApplicationTitle>Inventory Management MAUI</ApplicationTitle>
+	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
 	  <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 	</PropertyGroup>
