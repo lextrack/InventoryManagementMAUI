@@ -48,7 +48,7 @@
             <!-- Buttons -->
             <Button Text="Register transaction"
                     x:Name="registerButton"
-                    BackgroundColor="#6750A4"
+                    BackgroundColor="#228B22"
                     TextColor="White"
                     Clicked="OnRegisterClicked"
                     Margin="0,20,0,0"/>

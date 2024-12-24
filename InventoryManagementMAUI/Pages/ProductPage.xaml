@@ -47,7 +47,19 @@
             <!-- Category -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Category:" />
-                <Entry x:Name="categoryEntry"/>
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Picker x:Name="categoryPicker"
+                            Grid.Column="0"
+                            Title="Select or add a category"
+                            SelectedIndexChanged="OnCategorySelectedIndexChanged"/>
+                    <Button Grid.Column="1"
+                            Text="+"
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            CornerRadius="20"
+                            Padding="0"
+                            Clicked="OnAddCategoryClicked"/>
+                </Grid>
             </VerticalStackLayout>
 
             <!-- Total -->
@@ -61,7 +73,7 @@
                     <Label x:Name="totalLabel" 
                            Text="$ 0.00" 
                            FontSize="24"
-                           TextColor="#4CAF50"/>
+                           TextColor="#228B22"/>
                 </VerticalStackLayout>
             </Frame>
 
@@ -108,7 +120,7 @@
                 </Grid>
 
                 <!-- Buttons for existing product -->
-                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" 
+                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" 
                       ColumnSpacing="15"
                       HorizontalOptions="Center"
                       x:Name="existingProductButtons"
@@ -153,7 +165,7 @@
                                 HeightRequest="45"
                                 WidthRequest="45"
                                 CornerRadius="25"
-                                BackgroundColor="#4CAF50"
+                                BackgroundColor="#228B22"
                                 TextColor="White"
                                 FontSize="18"
                                 Padding="0"
@@ -162,26 +174,9 @@
                                FontSize="12"
                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
-
-                    <!-- Duplicate -->
-                    <VerticalStackLayout Grid.Column="3">
-                        <Button x:Name="duplicateButton"
-                                Text="📝"
-                                HeightRequest="45"
-                                WidthRequest="45"
-                                CornerRadius="25"
-                                BackgroundColor="#FF9800"
-                                TextColor="White"
-                                FontSize="18"
-                                Padding="0"
-                                Clicked="OnDuplicateClicked"/>
-                        <Label Text="Duplicate" 
-                               FontSize="12"
-                               HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
-
+                    
                     <!-- Delete -->
-                    <VerticalStackLayout Grid.Column="4">
+                    <VerticalStackLayout Grid.Column="3">
                         <Button x:Name="deleteButton"
                                 Text="🗑"
                                 HeightRequest="45"
@@ -196,7 +191,9 @@
                                FontSize="12"
                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
-                    <VerticalStackLayout Grid.Column="5">
+                    
+                    <!-- History -->
+                    <VerticalStackLayout Grid.Column="4">
                         <Button Text="📋"
                             HeightRequest="45"
                             WidthRequest="45"

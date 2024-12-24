@@ -9,6 +9,7 @@ public partial class ProductPage : ContentPage
     private Product _product;
     private bool _isQuantityValid = true;
     private bool _isPriceValid = true;
+    private List<string> _categories;
 
     public ProductPage(Product product = null)
     {
@@ -16,6 +17,7 @@ public partial class ProductPage : ContentPage
         _database = new DatabaseService();
         _product = product;
 
+        LoadCategoriesAsync();
         newProductButtons.IsVisible = product == null;
         existingProductButtons.IsVisible = product != null;
 
@@ -25,11 +27,69 @@ public partial class ProductPage : ContentPage
             descriptionEntry.Text = product.Description;
             quantityEntry.Text = product.Quantity.ToString();
             priceEntry.Text = product.Price.ToString("F2");
-            categoryEntry.Text = product.Category;
+            SetInitialCategory(product.Category);
             UpdateTotal();
         }
 
         UpdateSaveButtonState();
+    }
+
+    private async void LoadCategoriesAsync()
+    {
+        try
+        {
+            _categories = await _database.GetAllCategoriesAsync();
+            categoryPicker.ItemsSource = _categories;
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", "Could not load categories: " + ex.Message, "OK");
+        }
+    }
+
+    private void SetInitialCategory(string category)
+    {
+        if (string.IsNullOrEmpty(category)) return;
+
+        var index = _categories?.IndexOf(category) ?? -1;
+        if (index >= 0)
+        {
+            categoryPicker.SelectedIndex = index;
+        }
+        else if (_categories != null)
+        {
+            _categories.Add(category);
+            categoryPicker.ItemsSource = null;
+            categoryPicker.ItemsSource = _categories;
+            categoryPicker.SelectedIndex = _categories.Count - 1;
+        }
+    }
+
+    private void OnCategorySelectedIndexChanged(object sender, EventArgs e)
+    {
+        UpdateSaveButtonState();
+    }
+
+    private async void OnAddCategoryClicked(object sender, EventArgs e)
+    {
+        string newCategory = await DisplayPromptAsync("New Category",
+            "Enter the name for the new category:",
+            accept: "Add",
+            cancel: "Cancel");
+
+        if (!string.IsNullOrWhiteSpace(newCategory))
+        {
+            if (_categories == null)
+                _categories = new List<string>();
+
+            if (!_categories.Contains(newCategory))
+            {
+                _categories.Add(newCategory);
+                categoryPicker.ItemsSource = null;
+                categoryPicker.ItemsSource = _categories;
+                categoryPicker.SelectedItem = newCategory;
+            }
+        }
     }
 
     private async void OnRegisterOutputClicked(object sender, EventArgs e)
@@ -167,6 +227,12 @@ public partial class ProductPage : ContentPage
                 return;
             }
 
+            if (categoryPicker.SelectedItem == null)
+            {
+                await DisplayAlert("Error", "Please select or add a category", "OK");
+                return;
+            }
+
             if (_product == null)
                 _product = new Product();
 
@@ -174,7 +240,7 @@ public partial class ProductPage : ContentPage
             _product.Description = descriptionEntry.Text;
             _product.Quantity = int.Parse(quantityEntry.Text);
             _product.Price = decimal.Parse(priceEntry.Text);
-            _product.Category = categoryEntry.Text;
+            _product.Category = categoryPicker.SelectedItem.ToString();
 
             await _database.SaveProductAsync(_product);
             await Navigation.PopAsync();
@@ -193,7 +259,7 @@ public partial class ProductPage : ContentPage
                             $"Description: {descriptionEntry.Text}\n" +
                             $"Quantity: {quantityEntry.Text}\n" +
                             $"Price: ${priceEntry.Text}\n" +
-                            $"Category: {categoryEntry.Text}\n" +
+                            $"Category: {categoryPicker.SelectedItem}\n" +
                             $"Total: {totalLabel.Text}";
 
             await Clipboard.SetTextAsync(productData);
@@ -202,36 +268,6 @@ public partial class ProductPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Error", "Could not copy the data: " + ex.Message, "OK");
-        }
-    }
-
-    private async void OnDuplicateClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            bool answer = await DisplayAlert("Confirm",
-                "Do you want to create a new product with this data?",
-                "Yes", "No");
-
-            if (answer)
-            {
-                var newProduct = new Product
-                {
-                    Name = nameEntry.Text + " (Copy)",
-                    Description = descriptionEntry.Text,
-                    Quantity = int.Parse(quantityEntry.Text),
-                    Price = decimal.Parse(priceEntry.Text),
-                    Category = categoryEntry.Text
-                };
-
-                var newPage = new ProductPage(null);
-                await Navigation.PushAsync(newPage);
-                newPage.SetProductData(newProduct);
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Error", "Could not duplicate the product: " + ex.Message, "OK");
         }
     }
 
@@ -257,7 +293,7 @@ public partial class ProductPage : ContentPage
         descriptionEntry.Text = product.Description;
         quantityEntry.Text = product.Quantity.ToString();
         priceEntry.Text = product.Price.ToString("F2");
-        categoryEntry.Text = product.Category;
+        SetInitialCategory(product.Category);
         UpdateTotal();
     }
 }

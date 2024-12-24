@@ -47,6 +47,17 @@ namespace InventoryManagementMAUI.Services
                                 .FirstOrDefaultAsync();
         }
 
+        public async Task<List<string>> GetAllCategoriesAsync()
+        {
+            var products = await _database.Table<Product>().ToListAsync();
+            return products
+                .Where(p => !string.IsNullOrEmpty(p.Category))
+                .Select(p => p.Category)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+        }
+
         public async Task<int> SaveProductAsync(Product product)
         {
             if (product.Id == 0)
