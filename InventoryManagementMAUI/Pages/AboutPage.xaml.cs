@@ -22,7 +22,6 @@ public partial class AboutPage : ContentPage
         }
         catch (Exception ex)
         {
-            // Handle exception (e.g., no browser available)
             await DisplayAlert("Error", "Could not open the link.", "OK");
         }
     }

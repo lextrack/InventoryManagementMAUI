@@ -5,14 +5,14 @@
              Title="Dashboard">
 
     <Grid>
-        <!-- Indicador de Carga -->
+        <!-- Load content -->
         <ActivityIndicator IsRunning="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=IsBusy}"
                           IsVisible="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=IsBusy}"
                           HorizontalOptions="Center"
                           VerticalOptions="Center"
                           Color="#228B22"/>
 
-        <!-- Contenido Principal -->
+        <!-- Main Content -->
         <ScrollView IsVisible="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=!IsBusy}">
             <VerticalStackLayout Padding="20" Spacing="20">
                 <!-- Summary Cards -->
@@ -169,12 +169,12 @@
 
                 <!-- Alertas -->
                 <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}"
-       Padding="15"
-       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
+                       Padding="15"
+                       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Alerts"
-               FontSize="18"
-               FontAttributes="Bold"/>
+                       FontSize="18"
+                       FontAttributes="Bold"/>
                         <CollectionView x:Name="alertsList"
                       HeightRequest="150">
                             <CollectionView.ItemTemplate>
@@ -198,12 +198,12 @@
 
                 <!-- Top Productos -->
                 <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#333333}"
-       Padding="15"
-       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
+                       Padding="15"
+                       BorderColor="{AppThemeBinding Light=#DDDDDD, Dark=#444444}">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Top Products"
-               FontSize="18"
-               FontAttributes="Bold"/>
+                           FontSize="18"
+                           FontAttributes="Bold"/>
                         <CollectionView x:Name="topProductsList"
                       HeightRequest="200">
                             <CollectionView.ItemTemplate>
@@ -224,7 +224,7 @@
                                Text="{Binding MovementCount, StringFormat='Movements: {0}'}"
                                FontSize="14"/>
                                         <Label Grid.Column="2"
-                               Text="{Binding Value, StringFormat='${0:N2}'}"
+                               Text="{Binding Value, StringFormat='${0:N0}'}"
                                FontSize="14"
                                FontAttributes="Bold"/>
                                     </Grid>
@@ -236,17 +236,17 @@
 
                 <!-- Filtros de Tiempo -->
                 <Grid ColumnDefinitions="*,*,*" 
-      ColumnSpacing="10"
-      Margin="0,0,0,10">
-                    <Button Text="Last 7 Days"
-            Grid.Column="0"
-            Clicked="OnLastWeekClicked"/>
-                    <Button Text="Last 30 Days"
-            Grid.Column="1"
-            Clicked="OnLastMonthClicked"/>
-                    <Button Text="All Time"
-            Grid.Column="2"
-            Clicked="OnAllTimeClicked"/>
+                    ColumnSpacing="10"
+                    Margin="0,0,0,10">
+                            <Button Text="Last 7 Days"
+                    Grid.Column="0"
+                    Clicked="OnLastWeekClicked"/>
+                            <Button Text="Last 30 Days"
+                    Grid.Column="1"
+                    Clicked="OnLastMonthClicked"/>
+                            <Button Text="All Time"
+                    Grid.Column="2"
+                    Clicked="OnAllTimeClicked"/>
                 </Grid>
 
                 <!-- Movement Summary -->

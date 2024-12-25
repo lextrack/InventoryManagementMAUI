@@ -1,5 +1,6 @@
 ﻿using InventoryManagementMAUI.Models;
 using SQLite;
+using System.Diagnostics;
 
 namespace InventoryManagementMAUI.Services
 {
@@ -33,6 +34,41 @@ namespace InventoryManagementMAUI.Services
             }
         }
 
+        public async Task<string> GenerateSKUAsync(string category)
+        {
+            var prefix = GetCategoryPrefix(category);
+            var year = DateTime.Now.ToString("yy");
+
+            var products = await _database.Table<Product>().ToListAsync();
+            var lastSKU = products
+                .Where(p => p.SKU != null && p.SKU.StartsWith($"{prefix}{year}"))
+                .OrderByDescending(p => p.SKU)
+                .FirstOrDefault();
+
+            int sequence = 1;
+            if (lastSKU != null && lastSKU.SKU.Length >= 11)
+            {
+                if (int.TryParse(lastSKU.SKU.Substring(5), out int lastSequence))
+                {
+                    sequence = lastSequence + 1;
+                }
+            }
+
+            return $"{prefix}{year}{sequence:D6}";
+        }
+
+        private string GetCategoryPrefix(string category)
+        {
+            if (string.IsNullOrEmpty(category)) return "XX";
+
+            var prefix = new string(category.ToUpper()
+                .Where(char.IsLetter)
+                .Take(3)
+                .ToArray());
+
+            return prefix.PadRight(3, 'X');
+        }
+
         public async Task<List<Product>> GetProductsAsync()
         {
             return await _database.Table<Product>()
@@ -60,39 +96,64 @@ namespace InventoryManagementMAUI.Services
 
         public async Task<int> SaveProductAsync(Product product)
         {
-            if (product.Id == 0)
+            try
             {
-                product.CreatedAt = DateTime.Now;
-                var result = await _database.InsertAsync(product);
-                if (result > 0)
+                if (product.Id == 0)
                 {
-                    await RegisterProductMovement(new ProductMovement
+                    product.SKU = await GenerateSKUAsync(product.Category);
+                    product.CreatedAt = DateTime.Now;
+                    Debug.WriteLine($"Generated SKU: {product.SKU}");
+
+                    var result = await _database.InsertAsync(product);
+
+                    if (result > 0)
                     {
-                        ProductId = product.Id,
-                        Quantity = product.Quantity,
-                        Date = DateTime.Now,
-                        Type = "INCOMING",
-                        Notes = "Initial stock entry"
-                    });
+                        // Obtener el ID generado
+                        var savedProduct = await _database.Table<Product>()
+                            .OrderByDescending(p => p.Id)
+                            .FirstOrDefaultAsync();
+
+                        product.Id = savedProduct.Id;
+
+                        await RegisterProductMovement(new ProductMovement
+                        {
+                            ProductId = product.Id,
+                            Quantity = product.Quantity,
+                            Date = DateTime.Now,
+                            Type = "INCOMING",
+                            Notes = "Initial stock entry"
+                        });
+                    }
+                    return result;
                 }
-                return result;
+                else
+                {
+                    var existingProduct = await GetProductAsync(product.Id);
+                    if (existingProduct != null)
+                    {
+                        // Mantener el SKU existente
+                        product.SKU = existingProduct.SKU;
+
+                        if (existingProduct.Quantity != product.Quantity)
+                        {
+                            int difference = product.Quantity - existingProduct.Quantity;
+                            await RegisterProductMovement(new ProductMovement
+                            {
+                                ProductId = product.Id,
+                                Quantity = Math.Abs(difference),
+                                Date = DateTime.Now,
+                                Type = difference > 0 ? "INCOMING" : "OUTGOING",
+                                Notes = $"Stock adjusted by {Math.Abs(difference)} units"
+                            });
+                        }
+                    }
+                    return await _database.UpdateAsync(product);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var existingProduct = await GetProductAsync(product.Id);
-                if (existingProduct != null && existingProduct.Quantity != product.Quantity)
-                {
-                    int difference = product.Quantity - existingProduct.Quantity;
-                    await RegisterProductMovement(new ProductMovement
-                    {
-                        ProductId = product.Id,
-                        Quantity = Math.Abs(difference),
-                        Date = DateTime.Now,
-                        Type = difference > 0 ? "INCOMING" : "OUTGOING",
-                        Notes = $"Stock adjusted by {Math.Abs(difference)} units"
-                    });
-                }
-                return await _database.UpdateAsync(product);
+                Console.WriteLine($"Error in SaveProductAsync: {ex.Message}");
+                throw;
             }
         }
 

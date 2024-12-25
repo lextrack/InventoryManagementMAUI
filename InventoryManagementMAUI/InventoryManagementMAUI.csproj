@@ -111,7 +111,7 @@
 		<MauiIcon Include="Resources\AppIcon\iconapplication.png" Color="#005EA8" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splashlex.png" Color="#005EA8" BaseSize="250,250" />
+		<MauiSplashScreen Include="Resources\Splash\splashlex.png" Color="#000C15" BaseSize="250,250" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

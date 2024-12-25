@@ -1,5 +1,6 @@
 using InventoryManagementMAUI.Models;
 using InventoryManagementMAUI.Services;
+using System.Diagnostics;
 
 namespace InventoryManagementMAUI.Pages;
 
@@ -17,16 +18,18 @@ public partial class ProductPage : ContentPage
         _database = new DatabaseService();
         _product = product;
 
-        LoadCategoriesAsync();
         newProductButtons.IsVisible = product == null;
         existingProductButtons.IsVisible = product != null;
+
+        InitializePageAsync();
 
         if (product != null)
         {
             nameEntry.Text = product.Name;
+            skuLabel.Text = product.SKU ?? "No SKU";
             descriptionEntry.Text = product.Description;
             quantityEntry.Text = product.Quantity.ToString();
-            priceEntry.Text = product.Price.ToString("F2");
+            priceEntry.Text = product.Price.ToString("F0");
             SetInitialCategory(product.Category);
             UpdateTotal();
         }
@@ -34,7 +37,16 @@ public partial class ProductPage : ContentPage
         UpdateSaveButtonState();
     }
 
-    private async void LoadCategoriesAsync()
+    private async void InitializePageAsync()
+    {
+        await LoadCategoriesAsync();
+        if (_product != null)
+        {
+            SetInitialCategory(_product.Category);
+        }
+    }
+
+    private async Task LoadCategoriesAsync()
     {
         try
         {
@@ -106,8 +118,8 @@ public partial class ProductPage : ContentPage
     {
         try
         {
-            Console.WriteLine($"Quantity text: '{quantityEntry.Text}'");
-            Console.WriteLine($"Price text: '{priceEntry.Text}'");
+            Debug.WriteLine($"Quantity text: '{quantityEntry.Text}'");
+            Debug.WriteLine($"Price text: '{priceEntry.Text}'");
 
             if (string.IsNullOrWhiteSpace(quantityEntry.Text) ||
                 string.IsNullOrWhiteSpace(priceEntry.Text))
@@ -121,21 +133,21 @@ public partial class ProductPage : ContentPage
                                System.Globalization.CultureInfo.InvariantCulture, out decimal price))
             {
                 decimal total = quantity * price;
-                totalLabel.Text = $"$ {total:N2}";
+                totalLabel.Text = $"$ {total:N0}";
 
-                Console.WriteLine($"Converted quantity: {quantity}");
-                Console.WriteLine($"Converted price: {price}");
-                Console.WriteLine($"Calculated total: {total}");
+                Debug.WriteLine($"Converted quantity: {quantity}");
+                Debug.WriteLine($"Converted price: {price}");
+                Debug.WriteLine($"Calculated total: {total}");
             }
             else
             {
                 totalLabel.Text = "$ 0.00";
-                Console.WriteLine("Could not convert quantity or price");
+                Debug.WriteLine("Could not convert quantity or price");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error in UpdateTotal: {ex.Message}");
+            Debug.WriteLine($"Error in UpdateTotal: {ex.Message}");
             totalLabel.Text = "$ 0.00";
         }
     }
@@ -256,6 +268,7 @@ public partial class ProductPage : ContentPage
         try
         {
             var productData = $"Product: {nameEntry.Text}\n" +
+                            $"SKU: {skuLabel.Text}\n" +
                             $"Description: {descriptionEntry.Text}\n" +
                             $"Quantity: {quantityEntry.Text}\n" +
                             $"Price: ${priceEntry.Text}\n" +
@@ -290,6 +303,7 @@ public partial class ProductPage : ContentPage
     public void SetProductData(Product product)
     {
         nameEntry.Text = product.Name;
+        skuLabel.Text = product.SKU;
         descriptionEntry.Text = product.Description;
         quantityEntry.Text = product.Quantity.ToString();
         priceEntry.Text = product.Price.ToString("F2");

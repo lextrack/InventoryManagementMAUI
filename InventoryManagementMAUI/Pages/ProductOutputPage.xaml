@@ -16,7 +16,7 @@
                     <Label Text="{Binding Description}"
                            TextColor="Gray"/>
                     <Grid ColumnDefinitions="*,*">
-                        <Label Text="{Binding Price, StringFormat='Price: ${0:N2}'}"
+                        <Label Text="{Binding Price, StringFormat='Price: ${0:N0}'}"
                                Grid.Column="0"/>
                         <Label Text="{Binding Quantity, StringFormat='Current Stock: {0}'}"
                                Grid.Column="1"

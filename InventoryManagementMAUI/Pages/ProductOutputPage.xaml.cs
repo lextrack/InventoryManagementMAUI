@@ -57,12 +57,8 @@ public partial class ProductOutputPage : ContentPage
 
             await _database.RegisterProductOutput(_product.Id, quantity, notes);
             await DisplayAlert("Success", "Output registered successfully", "OK");
-
-            // Navegar al inicio (retroceder dos páginas)
             await Navigation.PopToRootAsync();
-            // O alternativamente:
-            // await Navigation.PopAsync();
-            // await Navigation.PopAsync();
+
         }
         catch (Exception ex)
         {

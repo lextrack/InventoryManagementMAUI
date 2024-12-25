@@ -15,10 +15,10 @@ public partial class ProductMovementsPage : ContentPage
         _database = new DatabaseService();
         _product = product;
 
-        // Configurar el BindingContext para la información del producto
         BindingContext = new
         {
             Name = product.Name,
+            SKU = product.SKU,
             Description = product.Description,
             Price = product.Price,
             Quantity = product.Quantity,
@@ -40,10 +40,9 @@ public partial class ProductMovementsPage : ContentPage
         {
             var movements = await _database.GetProductMovements(_product.Id);
 
-            // Ordenar movimientos por fecha descendente (más reciente primero)
+            // Sort transactions by descending date (most recent first)
             movements = movements.OrderByDescending(m => m.Date).ToList();
 
-            // Actualizar la colección de movimientos
             var viewModel = (dynamic)BindingContext;
             var movementsCollection = (ObservableCollection<ProductMovement>)viewModel.Movements;
             movementsCollection.Clear();

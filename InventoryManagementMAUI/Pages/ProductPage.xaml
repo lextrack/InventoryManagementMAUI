@@ -10,6 +10,12 @@
                 <Label Text="Name:" />
                 <Entry x:Name="nameEntry"/>
             </VerticalStackLayout>
+            
+            <!-- SKU -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="SKU:" />
+                <Entry x:Name="skuLabel" IsReadOnly="True" Placeholder="SKU is generated automatically"/>
+            </VerticalStackLayout>
 
             <!-- Description -->
             <VerticalStackLayout Spacing="5">
