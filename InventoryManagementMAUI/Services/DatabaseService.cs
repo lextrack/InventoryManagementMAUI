@@ -34,6 +34,13 @@ namespace InventoryManagementMAUI.Services
             }
         }
 
+        public async Task<bool> IsSkuUniqueAsync(string sku)
+        {
+            var existingProduct = await _database.Table<Product>()
+                .FirstOrDefaultAsync(p => p.SKU == sku);
+            return existingProduct == null;
+        }
+
         public async Task<string> GenerateSKUAsync(string category)
         {
             var prefix = GetCategoryPrefix(category);
@@ -54,7 +61,29 @@ namespace InventoryManagementMAUI.Services
                 }
             }
 
-            return $"{prefix}{year}{sequence:D6}";
+            string newSKU;
+            bool isUnique = false;
+            int maxAttempts = 100;
+            int attempts = 0;
+
+            do
+            {
+                newSKU = $"{prefix}{year}{sequence:D6}";
+                isUnique = await IsSkuUniqueAsync(newSKU);
+
+                if (!isUnique)
+                {
+                    sequence++;
+                    attempts++;
+                }
+            } while (!isUnique && attempts < maxAttempts);
+
+            if (!isUnique)
+            {
+                throw new Exception("SKU could not be generated after multiple attempts.");
+            }
+
+            return newSKU;
         }
 
         private string GetCategoryPrefix(string category)
@@ -100,7 +129,18 @@ namespace InventoryManagementMAUI.Services
             {
                 if (product.Id == 0)
                 {
-                    product.SKU = await GenerateSKUAsync(product.Category);
+                    if (!string.IsNullOrEmpty(product.SKU))
+                    {
+                        if (!await IsSkuUniqueAsync(product.SKU))
+                        {
+                            throw new Exception("SKU already exists in the database");
+                        }
+                    }
+                    else
+                    {
+                        product.SKU = await GenerateSKUAsync(product.Category);
+                    }
+
                     product.CreatedAt = DateTime.Now;
                     Debug.WriteLine($"Generated SKU: {product.SKU}");
 
@@ -108,7 +148,6 @@ namespace InventoryManagementMAUI.Services
 
                     if (result > 0)
                     {
-                        // Obtener el ID generado
                         var savedProduct = await _database.Table<Product>()
                             .OrderByDescending(p => p.Id)
                             .FirstOrDefaultAsync();
@@ -131,7 +170,6 @@ namespace InventoryManagementMAUI.Services
                     var existingProduct = await GetProductAsync(product.Id);
                     if (existingProduct != null)
                     {
-                        // Mantener el SKU existente
                         product.SKU = existingProduct.SKU;
 
                         if (existingProduct.Quantity != product.Quantity)
@@ -152,7 +190,7 @@ namespace InventoryManagementMAUI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in SaveProductAsync: {ex.Message}");
+                Debug.WriteLine($"Error in SaveProductAsync: {ex.Message}");
                 throw;
             }
         }
