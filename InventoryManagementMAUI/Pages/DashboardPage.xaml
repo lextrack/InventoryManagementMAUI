@@ -28,7 +28,7 @@
                             <Label x:Name="totalProductsLabel"
                                    Text="0"
                                    TextColor="White"
-                                   FontSize="24"
+                                   FontSize="18"
                                    FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </Frame>
@@ -44,7 +44,7 @@
                             <Label x:Name="totalValueLabel"
                                    Text="$0.00"
                                    TextColor="White"
-                                   FontSize="24"
+                                   FontSize="18"
                                    FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </Frame>
@@ -60,7 +60,7 @@
                             <Label x:Name="lowStockLabel"
                                    Text="0"
                                    TextColor="White"
-                                   FontSize="24"
+                                   FontSize="18"
                                    FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </Frame>
@@ -76,7 +76,7 @@
                             <Label x:Name="outOfStockLabel"
                                    Text="0"
                                    TextColor="White"
-                                   FontSize="24"
+                                   FontSize="18"
                                    FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </Frame>

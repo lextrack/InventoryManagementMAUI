@@ -46,69 +46,69 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
 	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
-	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
-	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
-	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
-	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
 		<ApplicationTitle>Inventory Management App</ApplicationTitle>
-		<ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 		<ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
 
 		<AndroidSigningKeyStore>inventoryapp.keystore</AndroidSigningKeyStore>
 		<AndroidSigningKeyAlias>inventoryapp</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass></AndroidSigningKeyPass>
 		<AndroidSigningStorePass></AndroidSigningStorePass>
-		<ApplicationVersion>2</ApplicationVersion>
+		<ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
-	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
-	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationTitle>Inventory Management App</ApplicationTitle>
-	  <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
+	  <ApplicationDisplayVersion>1.0.2</ApplicationDisplayVersion>
 	  <ApplicationId>com.lextrack.inventorymanagementmaui</ApplicationId>
-	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationVersion>3</ApplicationVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\iconapplication.png" Color="#005EA8" ForegroundScale="0.8" />
+		<MauiIcon Include="Resources\AppIcon\iconapplication.png" Color="#005EA8" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splashlex.png" Color="#005EA8" BaseSize="250,250" />

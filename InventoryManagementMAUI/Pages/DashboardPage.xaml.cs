@@ -55,7 +55,6 @@ namespace InventoryManagementMAUI.Pages
                 var products = await productsTask;
                 var movements = await movementsTask;
 
-                // Filtrar movimientos por fecha si es necesario
                 if (_startDate != DateTime.MinValue)
                 {
                     movements = movements.Where(m => m.Date >= _startDate).ToList();
@@ -86,7 +85,7 @@ namespace InventoryManagementMAUI.Pages
         private void UpdateSummaryCards(List<Product> products)
         {
             totalProductsLabel.Text = products.Count.ToString();
-            totalValueLabel.Text = $"${products.Sum(p => p.Price * p.Quantity):N2}";
+            totalValueLabel.Text = $"${products.Sum(p => p.Price * p.Quantity):N0}";
 
             const int LOW_STOCK_THRESHOLD = 10;
             lowStockLabel.Text = products.Count(p => p.Quantity > 0 && p.Quantity <= LOW_STOCK_THRESHOLD).ToString();
@@ -156,7 +155,7 @@ namespace InventoryManagementMAUI.Pages
             const int LOW_STOCK_THRESHOLD = 10;
             var now = DateTime.Now;
 
-            // Productos con bajo stock
+            // products with low stock
             foreach (var product in products.Where(p => p.Quantity > 0 && p.Quantity <= LOW_STOCK_THRESHOLD))
             {
                 _alerts.Add(new AlertItem
@@ -167,7 +166,7 @@ namespace InventoryManagementMAUI.Pages
                 });
             }
 
-            // Productos sin stock
+            // products out of stock
             foreach (var product in products.Where(p => p.Quantity == 0))
             {
                 _alerts.Add(new AlertItem
@@ -178,7 +177,7 @@ namespace InventoryManagementMAUI.Pages
                 });
             }
 
-            // Productos sin movimientos recientes
+            // products with no recent movements
             var lastMovements = movements
                 .GroupBy(m => m.ProductId)
                 .ToDictionary(g => g.Key, g => g.Max(m => m.Date));
