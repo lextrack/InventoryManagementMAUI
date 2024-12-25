@@ -11,6 +11,7 @@ public partial class ProductPage : ContentPage
     private bool _isQuantityValid = true;
     private bool _isPriceValid = true;
     private List<string> _categories;
+    private List<string> _locations;
 
     public ProductPage(Product product = null)
     {
@@ -40,11 +41,15 @@ public partial class ProductPage : ContentPage
     private async void InitializePageAsync()
     {
         await LoadCategoriesAsync();
+        await LoadLocationsAsync();
+
         if (_product != null)
         {
             SetInitialCategory(_product.Category);
+            SetInitialLocation(_product.Location);
         }
     }
+
 
     private async Task LoadCategoriesAsync()
     {
@@ -104,6 +109,59 @@ public partial class ProductPage : ContentPage
         }
     }
 
+    private async Task LoadLocationsAsync()
+    {
+        try
+        {
+            _locations = await _database.GetAllLocationsAsync();
+            locationPicker.ItemsSource = _locations;
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", "Could not load locations: " + ex.Message, "OK");
+        }
+    }
+
+    private void SetInitialLocation(string location)
+    {
+        if (string.IsNullOrEmpty(location)) return;
+
+        var index = _locations?.IndexOf(location) ?? -1;
+        if (index >= 0)
+        {
+            locationPicker.SelectedIndex = index;
+        }
+        else if (_locations != null)
+        {
+            _locations.Add(location);
+            locationPicker.ItemsSource = null;
+            locationPicker.ItemsSource = _locations;
+            locationPicker.SelectedIndex = _locations.Count - 1;
+        }
+    }
+
+    private async void OnAddLocationClicked(object sender, EventArgs e)
+    {
+        string newLocation = await DisplayPromptAsync("New Location",
+            "Enter the name for the new location:",
+            accept: "Add",
+            cancel: "Cancel");
+
+        if (!string.IsNullOrWhiteSpace(newLocation))
+        {
+            if (_locations == null)
+                _locations = new List<string>();
+
+            if (!_locations.Contains(newLocation))
+            {
+                _locations.Add(newLocation);
+                locationPicker.ItemsSource = null;
+                locationPicker.ItemsSource = _locations;
+                locationPicker.SelectedItem = newLocation;
+            }
+        }
+    }
+
     private async void OnRegisterOutputClicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new ProductOutputPage(_product));
@@ -124,7 +182,7 @@ public partial class ProductPage : ContentPage
             if (string.IsNullOrWhiteSpace(quantityEntry.Text) ||
                 string.IsNullOrWhiteSpace(priceEntry.Text))
             {
-                totalLabel.Text = "$ 0.00";
+                totalLabel.Text = "$ 0";
                 return;
             }
 
@@ -141,14 +199,14 @@ public partial class ProductPage : ContentPage
             }
             else
             {
-                totalLabel.Text = "$ 0.00";
+                totalLabel.Text = "$ 0";
                 Debug.WriteLine("Could not convert quantity or price");
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error in UpdateTotal: {ex.Message}");
-            totalLabel.Text = "$ 0.00";
+            totalLabel.Text = "$ 0";
         }
     }
 
@@ -245,6 +303,12 @@ public partial class ProductPage : ContentPage
                 return;
             }
 
+            if (locationPicker.SelectedItem == null)
+            {
+                await DisplayAlert("Error", "Please select or add a location", "OK");
+                return;
+            }
+
             if (_product == null)
                 _product = new Product();
 
@@ -253,6 +317,7 @@ public partial class ProductPage : ContentPage
             _product.Quantity = int.Parse(quantityEntry.Text);
             _product.Price = decimal.Parse(priceEntry.Text);
             _product.Category = categoryPicker.SelectedItem.ToString();
+            _product.Location = locationPicker.SelectedItem.ToString();
 
             await _database.SaveProductAsync(_product);
             await Navigation.PopAsync();
@@ -262,6 +327,7 @@ public partial class ProductPage : ContentPage
             await DisplayAlert("Error", "Could not save the product. Please check the fields.", "OK");
         }
     }
+
 
     private async void OnCopyToClipboardClicked(object sender, EventArgs e)
     {
@@ -306,8 +372,9 @@ public partial class ProductPage : ContentPage
         skuLabel.Text = product.SKU;
         descriptionEntry.Text = product.Description;
         quantityEntry.Text = product.Quantity.ToString();
-        priceEntry.Text = product.Price.ToString("F2");
+        priceEntry.Text = product.Price.ToString("F0");
         SetInitialCategory(product.Category);
+        SetInitialLocation(product.Location);
         UpdateTotal();
     }
 }

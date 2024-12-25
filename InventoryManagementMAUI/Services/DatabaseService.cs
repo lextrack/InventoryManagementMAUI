@@ -34,6 +34,17 @@ namespace InventoryManagementMAUI.Services
             }
         }
 
+        public async Task<List<string>> GetAllLocationsAsync()
+        {
+            var products = await _database.Table<Product>().ToListAsync();
+            return products
+                .Where(p => !string.IsNullOrEmpty(p.Location))
+                .Select(p => p.Location)
+                .Distinct()
+                .OrderBy(l => l)
+                .ToList();
+        }
+
         public async Task<bool> IsSkuUniqueAsync(string sku)
         {
             var existingProduct = await _database.Table<Product>()
@@ -129,20 +140,9 @@ namespace InventoryManagementMAUI.Services
             {
                 if (product.Id == 0)
                 {
-                    if (!string.IsNullOrEmpty(product.SKU))
-                    {
-                        if (!await IsSkuUniqueAsync(product.SKU))
-                        {
-                            throw new Exception("SKU already exists in the database");
-                        }
-                    }
-                    else
-                    {
-                        product.SKU = await GenerateSKUAsync(product.Category);
-                    }
-
+                    product.SKU = await GenerateSKUAsync(product.Category);
                     product.CreatedAt = DateTime.Now;
-                    Debug.WriteLine($"Generated SKU: {product.SKU}");
+                    product.Location = product.Location ?? string.Empty;
 
                     var result = await _database.InsertAsync(product);
 
@@ -160,7 +160,7 @@ namespace InventoryManagementMAUI.Services
                             Quantity = product.Quantity,
                             Date = DateTime.Now,
                             Type = "INCOMING",
-                            Notes = "Initial stock entry"
+                            Notes = $"Initial stock entry - Location: {product.Location}"
                         });
                     }
                     return result;
@@ -170,7 +170,11 @@ namespace InventoryManagementMAUI.Services
                     var existingProduct = await GetProductAsync(product.Id);
                     if (existingProduct != null)
                     {
-                        product.SKU = existingProduct.SKU;
+                        string locationChange = "";
+                        if (existingProduct.Location != product.Location)
+                        {
+                            locationChange = $" - Moved from {existingProduct.Location} to {product.Location}";
+                        }
 
                         if (existingProduct.Quantity != product.Quantity)
                         {
@@ -181,7 +185,18 @@ namespace InventoryManagementMAUI.Services
                                 Quantity = Math.Abs(difference),
                                 Date = DateTime.Now,
                                 Type = difference > 0 ? "INCOMING" : "OUTGOING",
-                                Notes = $"Stock adjusted by {Math.Abs(difference)} units"
+                                Notes = $"Stock adjusted by {Math.Abs(difference)} units{locationChange}"
+                            });
+                        }
+                        else if (!string.IsNullOrEmpty(locationChange))
+                        {
+                            await RegisterProductMovement(new ProductMovement
+                            {
+                                ProductId = product.Id,
+                                Quantity = 0,
+                                Date = DateTime.Now,
+                                Type = "LOCATION_CHANGE",
+                                Notes = $"Location changed{locationChange}"
                             });
                         }
                     }

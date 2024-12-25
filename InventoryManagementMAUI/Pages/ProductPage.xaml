@@ -43,28 +43,47 @@
                        Keyboard="Numeric"
                        MaxLength="10"
                        TextChanged="OnPriceTextChanged"
-                       Placeholder="0.00"/>
+                       Placeholder="$ 0"/>
                 <Label x:Name="priceError"
                        TextColor="Red"
                        IsVisible="false"
                        Text="Please enter a valid price"/>
             </VerticalStackLayout>
 
+            <!-- Location -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Location:" />
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                <Picker x:Name="locationPicker"
+                    Grid.Column="0"
+                    Title="Select or add a location"/>
+                <Button Grid.Column="1"
+                    Text="+"
+                    BackgroundColor="#6750A4"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    CornerRadius="20"
+                    Padding="0"
+                    Clicked="OnAddLocationClicked"/>
+                </Grid>
+            </VerticalStackLayout>
+
             <!-- Category -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Category:" />
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                    <Picker x:Name="categoryPicker"
-                            Grid.Column="0"
-                            Title="Select or add a category"
-                            SelectedIndexChanged="OnCategorySelectedIndexChanged"/>
-                    <Button Grid.Column="1"
-                            Text="+"
-                            HeightRequest="40"
-                            WidthRequest="40"
-                            CornerRadius="20"
-                            Padding="0"
-                            Clicked="OnAddCategoryClicked"/>
+                <Picker x:Name="categoryPicker"
+                    Grid.Column="0"
+                    Title="Select or add a category"
+                    SelectedIndexChanged="OnCategorySelectedIndexChanged"/>
+                <Button Grid.Column="1"
+                    Text="+"
+                    BackgroundColor="#2196F3"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    CornerRadius="20"
+                    Padding="0"
+                    Clicked="OnAddCategoryClicked"/>
                 </Grid>
             </VerticalStackLayout>
 
@@ -77,7 +96,7 @@
                     <Label Text="Total:" 
                            FontAttributes="Bold"/>
                     <Label x:Name="totalLabel" 
-                           Text="$ 0.00" 
+                           Text="$ 0" 
                            FontSize="24"
                            TextColor="#228B22"/>
                 </VerticalStackLayout>
@@ -90,6 +109,7 @@
                       ColumnSpacing="15"
                       HorizontalOptions="Center"
                       x:Name="newProductButtons">
+                    
                     <!-- Save -->
                     <VerticalStackLayout Grid.Column="0">
                         <Button x:Name="saveButton"
@@ -144,8 +164,8 @@
                                 Padding="0"
                                 Clicked="OnSaveClicked"/>
                         <Label Text="Save" 
-                               FontSize="12"
-                               HorizontalOptions="Center"/>
+                                FontSize="12"
+                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
 
                     <!-- Copy -->
@@ -161,8 +181,8 @@
                                 Padding="0"
                                 Clicked="OnCopyToClipboardClicked"/>
                         <Label Text="Copy" 
-                               FontSize="12"
-                               HorizontalOptions="Center"/>
+                                FontSize="12"
+                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
 
                     <!-- Outgoing -->
@@ -177,8 +197,8 @@
                                 Padding="0"
                                 Clicked="OnRegisterOutputClicked"/>
                         <Label Text="Outgoing" 
-                               FontSize="12"
-                               HorizontalOptions="Center"/>
+                                FontSize="12"
+                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                     
                     <!-- Delete -->
@@ -194,8 +214,8 @@
                                 Padding="0"
                                 Clicked="OnDeleteClicked"/>
                         <Label Text="Delete" 
-                               FontSize="12"
-                               HorizontalOptions="Center"/>
+                                FontSize="12"
+                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                     
                     <!-- History -->
@@ -209,7 +229,7 @@
                             FontSize="18"
                             Padding="0"
                             Clicked="OnViewMovementsClicked"/>
-                                        <Label Text="History" 
+                        <Label Text="History" 
                             FontSize="12"
                             HorizontalOptions="Center"/>
                     </VerticalStackLayout>
