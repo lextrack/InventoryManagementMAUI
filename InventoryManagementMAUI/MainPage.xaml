@@ -124,36 +124,36 @@
             </Picker>
 
             <HorizontalStackLayout Grid.Column="1"
-                         HorizontalOptions="Center"
-                         Spacing="5">
-                <Button x:Name="previousButton"
-                    Text="⟨"
-                    Clicked="OnPreviousClicked"
-                    MinimumWidthRequest="40"
-                    MinimumHeightRequest="40"
-                    Padding="10,0"
-                    BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
-                    TextColor="White"/>
+                HorizontalOptions="Center"
+                Spacing="5">
+            <Button x:Name="previousButton"
+                Text="⟨"
+                Clicked="OnPreviousClicked"
+                MinimumWidthRequest="40"
+                MinimumHeightRequest="40"
+                Padding="10,0"
+                BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                TextColor="White"/>
 
-                <Border Stroke="{AppThemeBinding Light=#e0e0e0, Dark=#404040}"
-                    StrokeThickness="1"
-                    BackgroundColor="{AppThemeBinding Light=#ffffff, Dark=#2b2b2b}"
-                    Padding="15,8">
-                    <Label x:Name="currentPageLabel"
-                   Text="1/1"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"
-                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-                </Border>
+            <Border Stroke="{AppThemeBinding Light=#e0e0e0, Dark=#404040}"
+                StrokeThickness="1"
+                BackgroundColor="{AppThemeBinding Light=#ffffff, Dark=#2b2b2b}"
+                Padding="15,8">
+            <Label x:Name="currentPageLabel"
+                Text="1/1"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+            </Border>
 
-                <Button x:Name="nextButton"
-                    Text="⟩"
-                    Clicked="OnNextClicked"
-                    MinimumWidthRequest="40"
-                    MinimumHeightRequest="40"
-                    Padding="10,0"
-                    BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
-                    TextColor="White"/>
+            <Button x:Name="nextButton"
+                Text="⟩"
+                Clicked="OnNextClicked"
+                MinimumWidthRequest="40"
+                MinimumHeightRequest="40"
+                Padding="10,0"
+                BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
+                TextColor="White"/>
             </HorizontalStackLayout>
 
             <!-- Export and Dashboard button -->
@@ -164,8 +164,7 @@
                 Margin="10,0,0,0"
                 BackgroundColor="{AppThemeBinding Light=#228B22, Dark=#228B22}"
                 TextColor="White"
-                Clicked="OnOptionsClicked">
-            </Button>
+                Clicked="OnOptionsClicked"/>
 
             <!-- About Button -->
             <Button Grid.Column="3"

@@ -132,66 +132,189 @@ namespace InventoryManagementMAUI
 
         private async void OnOptionsClicked(object sender, EventArgs e)
         {
-            string action = await DisplayActionSheet(
-                "Options",
-                "Cancel",
-                null,
-                "Dashboard",
-                "Export to Excel",
-                "Backup Database",
-                "Restore Database");
-
-            var backupService = new DatabaseBackupService(_database);
-
-            switch (action)
+            var page = new ContentPage
             {
-                case "Dashboard":
-                    await Navigation.PushAsync(new DashboardPage());
-                    break;
+                BackgroundColor = Colors.Transparent
+            };
 
-                case "Backup Database":
-                    try
-                    {
-                        var backupPath = await backupService.CreateBackup();
-                        await Share.RequestAsync(new ShareFileRequest
-                        {
-                            Title = "Share Database Backup",
-                            File = new ShareFile(backupPath)
-                        });
-                        await DisplayAlert("Success", "Backup created successfully", "OK");
-                    }
-                    catch (Exception ex)
-                    {
-                        await DisplayAlert("Error", $"Backup failed: {ex.Message}", "OK");
-                    }
-                    break;
+            var mainGrid = new Grid
+            {
+                BackgroundColor = Colors.Transparent,
+                Padding = new Thickness(20),
+                RowDefinitions =
+                {
+                    new RowDefinition { Height = GridLength.Star },
+                    new RowDefinition { Height = GridLength.Auto }
+                }
+            };
 
-                case "Restore Database":
-                    try
+            var menuFrame = new Frame
+            {
+                BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark ?
+                    Color.FromArgb("#2B2B2B") : Colors.White,
+                CornerRadius = DeviceInfo.Platform == DevicePlatform.Android ? 28 : 10,
+                Padding = new Thickness(0),
+                HasShadow = true
+            };
+
+            var menuGrid = new Grid
+            {
+                RowSpacing = 0,
+                Padding = new Thickness(0)
+            };
+
+            var titlePadding = DeviceInfo.Platform == DevicePlatform.Android ?
+                new Thickness(24, 20) : new Thickness(20, 15);
+
+            menuGrid.Add(new Label
+            {
+                Text = "Options",
+                FontSize = DeviceInfo.Platform == DevicePlatform.Android ? 20 : 18,
+                FontAttributes = FontAttributes.Bold,
+                Padding = titlePadding,
+                TextColor = Application.Current.RequestedTheme == AppTheme.Dark ?
+                    Colors.White : Colors.Black
+            }, 0, 0);
+
+            var options = new List<(string Text, string Icon, Action Action)>
+            {
+                ("Dashboard", "📊", async () => await Navigation.PushAsync(new DashboardPage())),
+                ("Export to Excel", "📑", async () => await ExportToExcel()),
+                ("Backup Database", "💾", async () => await HandleBackupDatabase()),
+                ("Restore Database", "📥", async () => await HandleRestoreDatabase())
+            };
+
+            var buttonPadding = DeviceInfo.Platform == DevicePlatform.Android ?
+                new Thickness(24, 16) : new Thickness(20, 15);
+
+            for (int i = 0; i < options.Count; i++)
+            {
+                var option = options[i];
+                var button = new Button
+                {
+                    Text = $"{option.Icon} {option.Text}",
+                    BackgroundColor = Colors.Transparent,
+                    TextColor = Application.Current.RequestedTheme == AppTheme.Dark ?
+                        Colors.White : Colors.Black,
+                    HorizontalOptions = LayoutOptions.Fill,
+                    Padding = buttonPadding,
+                    FontSize = DeviceInfo.Platform == DevicePlatform.Android ? 16 : 16
+                };
+
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    button.Style = new Style(typeof(Button))
                     {
-                        var result = await FilePicker.PickAsync(new PickOptions
+                        Setters = {
+                    new Setter { Property = VisualStateManager.VisualStateGroupsProperty,
+                        Value = new VisualStateGroupList
                         {
-                            FileTypes = new FilePickerFileType(
-                                new Dictionary<DevicePlatform, IEnumerable<string>>
+                            new VisualStateGroup
+                            {
+                                States =
                                 {
-                            { DevicePlatform.iOS, new[] { "public.database" } },
-                            { DevicePlatform.Android, new[] { "application/x-sqlite3", "application/octet-stream" } },
-                            { DevicePlatform.WinUI, new[] { ".db" } }
-                                })
-                        });
-
-                        if (result != null)
-                        {
-                            await backupService.RestoreFromBackup(result.FullPath);
-                            await LoadData();
-                            await DisplayAlert("Success", "Database restored successfully", "OK");
+                                    new VisualState
+                                    {
+                                        Name = "Pressed",
+                                        Setters =
+                                        {
+                                            new Setter { Property = Button.BackgroundColorProperty,
+                                                Value = Color.FromRgba("#20000000") }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        await DisplayAlert("Error", $"Restore failed: {ex.Message}", "OK");
-                    }
-                    break;
+                }
+                    };
+                }
+
+                button.Clicked += async (s, e) =>
+                {
+                    await CloseMenu();
+                    option.Action();
+                };
+
+                menuGrid.Add(button, 0, i + 1);
+            }
+
+            var cancelButton = new Button
+            {
+                Text = "Cancel",
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Red,
+                Margin = new Thickness(0, 10, 0, DeviceInfo.Platform == DevicePlatform.Android ? 8 : 0),
+                FontSize = DeviceInfo.Platform == DevicePlatform.Android ? 16 : 16,
+                Padding = buttonPadding
+            };
+
+            cancelButton.Clicked += async (s, e) => await CloseMenu();
+
+            menuFrame.Content = menuGrid;
+            mainGrid.Add(menuFrame, 0, 1);
+            page.Content = mainGrid;
+
+            var tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += async (s, e) => await CloseMenu();
+            mainGrid.GestureRecognizers.Add(tapGesture);
+
+            page.Opacity = 0;
+            await Application.Current.MainPage.Navigation.PushModalAsync(page, false);
+            await page.FadeTo(1, 150);
+
+            async Task CloseMenu()
+            {
+                await page.FadeTo(0, 100);
+                await Application.Current.MainPage.Navigation.PopModalAsync(false);
+            }
+        }
+
+        private async Task HandleBackupDatabase()
+        {
+            var backupService = new DatabaseBackupService(_database);
+            try
+            {
+                var backupPath = await backupService.CreateBackup();
+                await Share.RequestAsync(new ShareFileRequest
+                {
+                    Title = "Share Database Backup",
+                    File = new ShareFile(backupPath)
+                });
+                await DisplayAlert("Success", "Backup created successfully", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Backup failed: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task HandleRestoreDatabase()
+        {
+            try
+            {
+                var result = await FilePicker.PickAsync(new PickOptions
+                {
+                    FileTypes = new FilePickerFileType(
+                        new Dictionary<DevicePlatform, IEnumerable<string>>
+                        {
+                    { DevicePlatform.iOS, new[] { "public.database" } },
+                    { DevicePlatform.Android, new[] { "application/x-sqlite3", "application/octet-stream" } },
+                    { DevicePlatform.WinUI, new[] { ".db" } }
+                        })
+                });
+
+                if (result != null)
+                {
+                    var backupService = new DatabaseBackupService(_database);
+                    await backupService.RestoreFromBackup(result.FullPath);
+                    await LoadData();
+                    await DisplayAlert("Success", "Database restored successfully", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Restore failed: {ex.Message}", "OK");
             }
         }
 
