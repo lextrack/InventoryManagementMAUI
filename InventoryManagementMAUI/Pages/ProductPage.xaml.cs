@@ -338,6 +338,7 @@ public partial class ProductPage : ContentPage
                             $"Description: {descriptionEntry.Text}\n" +
                             $"Quantity: {quantityEntry.Text}\n" +
                             $"Price: ${priceEntry.Text}\n" +
+                            $"Location: {locationPicker.SelectedItem}\n" +
                             $"Category: {categoryPicker.SelectedItem}\n" +
                             $"Total: {totalLabel.Text}";
 

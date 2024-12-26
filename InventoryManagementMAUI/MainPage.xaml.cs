@@ -67,7 +67,7 @@ namespace InventoryManagementMAUI
                 {
                     var worksheet = workbook.Worksheets.Add("Inventory");
 
-                    string[] headers = { "ID", "Name", "Description", "Quantity", "Price", "Category", "Created Date" };
+                    string[] headers = { "ID", "Name", "Description", "Quantity", "Price", "Location", "Category", "Created Date" };
                     for (int i = 0; i < headers.Length; i++)
                     {
                         worksheet.Cell(1, i + 1).Value = headers[i];
@@ -82,8 +82,9 @@ namespace InventoryManagementMAUI
                         worksheet.Cell(row, 3).Value = product.Description;
                         worksheet.Cell(row, 4).Value = product.Quantity;
                         worksheet.Cell(row, 5).Value = product.Price;
-                        worksheet.Cell(row, 6).Value = product.Category;
-                        worksheet.Cell(row, 7).Value = product.CreatedAt;
+                        worksheet.Cell(row, 6).Value = product.Location;
+                        worksheet.Cell(row, 7).Value = product.Category;
+                        worksheet.Cell(row, 8).Value = product.CreatedAt;
                         row++;
                     }
 
@@ -98,7 +99,6 @@ namespace InventoryManagementMAUI
 
                     worksheet.Columns().AdjustToContents();
 
-                    // Save and share
                     workbook.SaveAs(filePath);
                     await Task.Delay(100);
 
