@@ -1,7 +1,7 @@
-<h2 align="center">Inventory Management MAUI app</h2>
+<h2 align="center">Simple Inventory Management MAUI</h2>
 <p align="left">
 
-A streamlined inventory management solution designed for small business. Track product entries and exits, monitor inventory movements through a detailed history log, calculate total values based on quantity and price, and export data to Excel for comprehensive reporting.
+Effortlessly manage your inventory, track incoming and outgoing products, view detailed statistics, and keep a history of all transactions. Backup your data, restore backups, and easily export your inventory to Excel for further analysis.
 
 <h2 align="center">Captures</h2>
 <p align="left">
