@@ -1,4 +1,5 @@
-﻿using InventoryManagementMAUI.Models;
+﻿using InventoryManagementApp.Models;
+using InventoryManagementMAUI.Models;
 using InventoryManagementMAUI.Services;
 using System.Collections.ObjectModel;
 
@@ -278,35 +279,4 @@ namespace InventoryManagementMAUI.Pages
         }
     }
 
-    public class ActivityItem
-    {
-        public string Icon { get; set; }
-        public string Description { get; set; }
-        public DateTime Date { get; set; }
-        public int Quantity { get; set; }
-        public Color TextColor { get; set; }
-    }
-
-    public class CategoryItem
-    {
-        public string Category { get; set; }
-        public int Count { get; set; }
-        public double Percentage { get; set; }
-        public string Color { get; set; }
-    }
-
-    public class AlertItem
-    {
-        public string Icon { get; set; }
-        public string Message { get; set; }
-        public Color Color { get; set; }
-    }
-
-    public class TopProduct
-    {
-        public string Name { get; set; }
-        public string Category { get; set; }
-        public int MovementCount { get; set; }
-        public decimal Value { get; set; }
-    }
 }
