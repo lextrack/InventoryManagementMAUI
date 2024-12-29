@@ -30,7 +30,7 @@ public partial class ProductPage : ContentPage
             skuLabel.Text = product.SKU ?? "No SKU";
             descriptionEntry.Text = product.Description;
             quantityEntry.Text = product.Quantity.ToString();
-            priceEntry.Text = product.Price.ToString("F0");
+            priceEntry.Text = product.Price.ToString("F2");
             SetInitialCategory(product.Category);
             UpdateTotal();
         }
@@ -182,7 +182,7 @@ public partial class ProductPage : ContentPage
             if (string.IsNullOrWhiteSpace(quantityEntry.Text) ||
                 string.IsNullOrWhiteSpace(priceEntry.Text))
             {
-                totalLabel.Text = "$ 0";
+                totalLabel.Text = "$ 0.00";
                 return;
             }
 
@@ -191,7 +191,7 @@ public partial class ProductPage : ContentPage
                                System.Globalization.CultureInfo.InvariantCulture, out decimal price))
             {
                 decimal total = quantity * price;
-                totalLabel.Text = $"$ {total:N0}";
+                totalLabel.Text = $"$ {total:N2}";
 
                 Debug.WriteLine($"Converted quantity: {quantity}");
                 Debug.WriteLine($"Converted price: {price}");
@@ -199,14 +199,14 @@ public partial class ProductPage : ContentPage
             }
             else
             {
-                totalLabel.Text = "$ 0";
+                totalLabel.Text = "$ 0.00";
                 Debug.WriteLine("Could not convert quantity or price");
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error in UpdateTotal: {ex.Message}");
-            totalLabel.Text = "$ 0";
+            totalLabel.Text = "$ 0.00";
         }
     }
 
@@ -373,7 +373,7 @@ public partial class ProductPage : ContentPage
         skuLabel.Text = product.SKU;
         descriptionEntry.Text = product.Description;
         quantityEntry.Text = product.Quantity.ToString();
-        priceEntry.Text = product.Price.ToString("F0");
+        priceEntry.Text = product.Price.ToString("F2");
         SetInitialCategory(product.Category);
         SetInitialLocation(product.Location);
         UpdateTotal();

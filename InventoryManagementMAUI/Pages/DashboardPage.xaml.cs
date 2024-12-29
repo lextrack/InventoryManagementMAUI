@@ -65,7 +65,7 @@ namespace InventoryManagementMAUI.Pages
                     UpdateSummaryCards(products);
                     UpdateRecentActivity(movements, products);
                     UpdateCategoryDistribution(products);
-                    UpdateMovementSummary(movements);
+                    UpdateMovementSummary(movements, products);
                     UpdateAlerts(products, movements);
                     UpdateTopProducts(products, movements);
                 });
@@ -85,7 +85,7 @@ namespace InventoryManagementMAUI.Pages
         private void UpdateSummaryCards(List<Product> products)
         {
             totalProductsLabel.Text = products.Count.ToString();
-            totalValueLabel.Text = $"${products.Sum(p => p.Price * p.Quantity):N0}";
+            totalValueLabel.Text = $"${products.Sum(p => p.Price * p.Quantity):N2}";
 
             const int LOW_STOCK_THRESHOLD = 10;
             lowStockLabel.Text = products.Count(p => p.Quantity > 0 && p.Quantity <= LOW_STOCK_THRESHOLD).ToString();
@@ -143,10 +143,13 @@ namespace InventoryManagementMAUI.Pages
             }
         }
 
-        private void UpdateMovementSummary(List<ProductMovement> movements)
+        private void UpdateMovementSummary(List<ProductMovement> movements, List<Product> products)
         {
-            incomingCountLabel.Text = movements.Count(m => m.Type == "INCOMING").ToString();
-            outgoingCountLabel.Text = movements.Count(m => m.Type == "OUTGOING").ToString();
+            var existingProductIds = products.Select(p => p.Id).ToHashSet();
+            var validMovements = movements.Where(m => existingProductIds.Contains(m.ProductId));
+
+            incomingCountLabel.Text = validMovements.Count(m => m.Type == "INCOMING").ToString();
+            outgoingCountLabel.Text = validMovements.Count(m => m.Type == "OUTGOING").ToString();
         }
 
         private void UpdateAlerts(List<Product> products, List<ProductMovement> movements)

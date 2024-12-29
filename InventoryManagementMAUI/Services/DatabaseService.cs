@@ -212,7 +212,16 @@ namespace InventoryManagementMAUI.Services
 
         public async Task<int> DeleteProductAsync(Product product)
         {
-            return await _database.DeleteAsync(product);
+            await _database.RunInTransactionAsync(async (tran) =>
+            {
+                await _database.Table<ProductMovement>()
+                    .Where(m => m.ProductId == product.Id)
+                    .DeleteAsync();
+
+                await _database.DeleteAsync(product);
+            });
+
+            return 1;
         }
 
         public async Task RegisterProductOutput(int productId, int quantity, string notes)

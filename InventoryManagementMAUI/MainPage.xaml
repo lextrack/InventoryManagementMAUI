@@ -82,7 +82,7 @@
                                 <StackLayout Grid.Column="1"
                                            HorizontalOptions="End"
                                            Spacing="3">
-                                    <Label Text="{Binding Price, StringFormat='${0:N0}'}"
+                                    <Label Text="{Binding Price, StringFormat='${0:N2}'}"
                                            FontSize="16"
                                            FontAttributes="Bold"
                                            HorizontalOptions="End"/>

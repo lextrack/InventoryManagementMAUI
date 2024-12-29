@@ -224,7 +224,7 @@
                                Text="{Binding MovementCount, StringFormat='Movements: {0}'}"
                                FontSize="14"/>
                                         <Label Grid.Column="2"
-                               Text="{Binding Value, StringFormat='${0:N0}'}"
+                               Text="{Binding Value, StringFormat='${0:N2}'}"
                                FontSize="14"
                                FontAttributes="Bold"/>
                                     </Grid>
@@ -265,7 +265,7 @@
                                        TextColor="#4CAF50"/>
                                 <Label x:Name="incomingCountLabel"
                                        Text="0"
-                                       FontSize="20"
+                                       FontSize="18"
                                        FontAttributes="Bold"/>
                             </VerticalStackLayout>
                             <!-- Outgoing -->
@@ -275,7 +275,7 @@
                                        TextColor="#F44336"/>
                                 <Label x:Name="outgoingCountLabel"
                                        Text="0"
-                                       FontSize="20"
+                                       FontSize="18"
                                        FontAttributes="Bold"/>
                             </VerticalStackLayout>
                         </Grid>
