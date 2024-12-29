@@ -8,7 +8,7 @@
             <!-- Name -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Name:" />
-                <Entry x:Name="nameEntry"/>
+                <Entry x:Name="nameEntry" ReturnType="Next" Completed="OnEntryCompleted"/>
             </VerticalStackLayout>
             
             <!-- SKU -->
@@ -20,15 +20,17 @@
             <!-- Description -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Description:" />
-                <Entry x:Name="descriptionEntry"/>
+                <Entry x:Name="descriptionEntry" ReturnType="Next" Completed="OnEntryCompleted"/>
             </VerticalStackLayout>
 
             <!-- Quantity -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Quantity:" />
                 <Entry x:Name="quantityEntry"
+                       ReturnType="Next"
                        Keyboard="Numeric"
                        MaxLength="8"
+                       Completed="OnEntryCompleted"
                        TextChanged="OnQuantityTextChanged"/>
                 <Label x:Name="quantityError"
                        TextColor="Red"
@@ -41,6 +43,8 @@
                 <Label Text="Price:" />
                 <Entry x:Name="priceEntry"
                        Keyboard="Numeric"
+                       ReturnType="Next"
+                       Completed="OnEntryCompleted"
                        MaxLength="10"
                        TextChanged="OnPriceTextChanged"
                        Placeholder="$ 0"/>

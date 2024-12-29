@@ -84,11 +84,30 @@ namespace InventoryManagementMAUI.Pages
 
         private void UpdateSummaryCards(List<Product> products)
         {
-            totalProductsLabel.Text = products.Count.ToString();
-            totalValueLabel.Text = $"${products.Sum(p => p.Price * p.Quantity):N2}";
+            UpdateTotalProducts(products);
+            UpdateTotalValue(products);
+            UpdateLowStock(products);
+            UpdateOutOfStock(products);
+        }
 
+        private void UpdateTotalProducts(List<Product> products)
+        {
+            totalProductsLabel.Text = products.Count.ToString();
+        }
+
+        private void UpdateTotalValue(List<Product> products)
+        {
+            totalValueLabel.Text = $"${products.Sum(p => p.Price * p.Quantity):N2}";
+        }
+
+        private void UpdateLowStock(List<Product> products)
+        {
             const int LOW_STOCK_THRESHOLD = 10;
             lowStockLabel.Text = products.Count(p => p.Quantity > 0 && p.Quantity <= LOW_STOCK_THRESHOLD).ToString();
+        }
+
+        private void UpdateOutOfStock(List<Product> products)
+        {
             outOfStockLabel.Text = products.Count(p => p.Quantity == 0).ToString();
         }
 

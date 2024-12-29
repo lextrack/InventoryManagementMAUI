@@ -50,7 +50,6 @@ public partial class ProductPage : ContentPage
         }
     }
 
-
     private async Task LoadCategoriesAsync()
     {
         try
@@ -328,7 +327,6 @@ public partial class ProductPage : ContentPage
         }
     }
 
-
     private async void OnCopyToClipboardClicked(object sender, EventArgs e)
     {
         try
@@ -377,5 +375,17 @@ public partial class ProductPage : ContentPage
         SetInitialCategory(product.Category);
         SetInitialLocation(product.Location);
         UpdateTotal();
+    }
+
+    private void OnEntryCompleted(object sender, EventArgs e)
+    {
+        if (sender == nameEntry)
+            descriptionEntry.Focus();
+        else if (sender == descriptionEntry)
+            quantityEntry.Focus();
+        else if (sender == quantityEntry)
+            priceEntry.Focus();
+        else if (sender == priceEntry)
+            priceEntry.Unfocus();
     }
 }
